@@ -1,0 +1,295 @@
+/* =================================================================
+   ChatHistory.css – 💬 ChatHistory.jsx 전용 스타일
+   - index.css의 CSS 변수 기반으로 라이트/다크/반응형 지원
+   - 시각적 일관성과 세련된 UI를 위한 스타일 최적화
+   ================================================================= */
+
+/* ---------- 컨테이너 ---------- */
+.chat-history {
+  position: fixed;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  max-height: calc(100vh - 2 * var(--spacing-lg));
+  background: var(--white-95);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--white-20);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, background 0.3s ease;
+  z-index: 1000;
+}
+
+/* ---------- 헤더 ---------- */
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--white-30);
+  background: transparent;
+}
+
+.chat-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-lg);
+  font-weight: var(--font-bold);
+  color: var(--dark-gray);
+}
+
+.title-icon {
+  font-size: 1.4rem;
+  color: var(--primary-color);
+}
+
+.message-count {
+  font-size: var(--font-xs);
+  color: var(--gray);
+}
+
+/* ---------- 메시지 영역 ---------- */
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md) var(--spacing-lg);
+  scroll-behavior: smooth;
+  background: transparent;
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+.messages-container::-webkit-scrollbar-thumb {
+  background: var(--white-30);
+  border-radius: 4px;
+}
+
+/* ---------- 빈 상태 ---------- */
+.empty-chat-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--gray);
+  padding: var(--spacing-2xl);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.empty-title {
+  font-size: var(--font-lg);
+  font-weight: var(--font-semibold);
+  color: var(--dark-gray);
+  margin-bottom: var(--spacing-xs);
+}
+
+.empty-description {
+  font-size: var(--font-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-tips {
+  font-size: var(--font-xs);
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ---------- 메시지 ---------- */
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  animation: fadeIn 0.25s ease-out;
+}
+
+.message-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  max-width: 80%;
+}
+
+.message-avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.message-content {
+  background: var(--white-90);
+  border: 1px solid var(--white-20);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow-wrap: anywhere;
+}
+
+.message-item.user .message-content::after,
+.message-item.assistant .message-content::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  border: 8px solid transparent;
+}
+.message-item.user .message-content::after {
+  right: -16px;
+  border-left-color: var(--white-90);
+}
+.message-item.assistant .message-content::after {
+  left: -16px;
+  border-right-color: var(--white-90);
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-xs);
+  color: var(--gray);
+}
+
+.message-text {
+  font-size: var(--font-base);
+  color: var(--dark-gray);
+  line-height: 1.5;
+}
+
+.message-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+.meta-tag {
+  font-size: var(--font-xs);
+  background: var(--white-20);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.voice-tag   { background: var(--info-color);    color: white; }
+.tts-tag     { background: var(--success-color); color: white; }
+.model-tag   { background: var(--accent-color);  color: black; }
+
+.message-item.user {
+  margin-left: auto;
+  flex-direction: row-reverse;
+}
+.message-item.user .message-content {
+  background: linear-gradient(135deg, #4299e1, #3182ce);
+  color: white;
+}
+.message-item.assistant {
+  margin-right: auto;
+}
+.message-item.assistant .message-content {
+  background: linear-gradient(135deg, #48bb78, #38a169);
+  color: white;
+}
+.message-item.system {
+  margin: 0 auto;
+  max-width: 60%;
+  text-align: center;
+}
+.message-item.system .message-content {
+  background: var(--white-50);
+  font-style: italic;
+  color: var(--dark-gray);
+}
+
+/* ---------- 푸터 ---------- */
+.chat-footer {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-top: 1px solid var(--white-20);
+  background: var(--white-90);
+}
+
+.conversation-summary {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  font-size: var(--font-sm);
+  color: var(--gray);
+}
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* ---------- 반응형 ---------- */
+@media (max-width: 768px) {
+  .chat-history {
+    width: 100%;
+    max-width: 100vw;
+    top: auto;
+    bottom: 0;
+    border-left: none;
+    border-top: 1px solid var(--white-30);
+    border-radius: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* ---------- 다크 모드 ---------- */
+@media (prefers-color-scheme: dark) {
+  .chat-history {
+    background: rgba(30, 41, 59, 0.95);
+    color: var(--white);
+  }
+  .chat-header,
+  .chat-footer {
+    border-color: var(--black-30);
+  }
+  .message-content {
+    border-color: var(--black-30);
+  }
+  .message-item.system .message-content {
+    background: var(--black-20);
+  }
+  .messages-container::-webkit-scrollbar-thumb {
+    background: var(--black-50);
+  }
+}
+
+/* ---------- 접근성 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

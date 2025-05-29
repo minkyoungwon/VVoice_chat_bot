@@ -1,0 +1,651 @@
+/* SimpleVoiceChat.css - 개선된 스타일 */
+
+.simple-voice-chat {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+/* 상태 표시 영역 */
+.status-section {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.status-indicator {
+  position: relative;
+  padding: 20px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 20px;
+}
+
+.status-pulse {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--status-color, #4caf50);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  50% { opacity: 0.7; transform: translateY(-50%) scale(1.2); }
+}
+
+.status-message {
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: 40px;
+}
+
+.processing-step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.processing-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 현재 음성 인식 결과 */
+.current-transcript {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 10px;
+  text-align: left;
+}
+
+.transcript-label {
+  font-size: 12px;
+  color: #2196f3;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.transcript-text {
+  font-size: 16px;
+  color: white;
+  font-style: italic;
+}
+
+/* VAD 음성 레벨 표시 */
+.vad-level-display {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 10px;
+}
+
+.vad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.vad-label {
+  font-size: 12px;
+  color: #4caf50;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.vad-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.vad-status.active {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.vad-status.inactive {
+  background: rgba(158, 158, 158, 0.2);
+  color: #9e9e9e;
+}
+
+.vad-level-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.vad-level-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  border-radius: 4px;
+  transition: width 0.1s ease;
+}
+
+/* 컨트롤 버튼 영역 */
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.main-button {
+  padding: 20px 30px;
+  border: none;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.main-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.main-button:active {
+  transform: translateY(0);
+}
+
+.connect-button {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+}
+
+.fullscreen-button {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+  flex-direction: column;
+  gap: 5px;
+}
+
+.start-conversation-button {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stop-conversation-button {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.3);
+}
+
+.button-icon {
+  font-size: 24px;
+}
+
+.button-text {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.button-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+/* 설정 버튼들 */
+.settings-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.tts-settings-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.vad-settings-button.active {
+  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+  border-color: rgba(33, 150, 243, 0.5);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.vad-toggle-button.active {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  border-color: rgba(76, 175, 80, 0.5);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* 설정 패널 */
+.settings-panel {
+  margin: 20px 0;
+  animation: slideDown 0.3s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.secondary-button {
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.secondary-button.active {
+  background: rgba(33, 150, 243, 0.3);
+  border-color: rgba(33, 150, 243, 0.5);
+}
+
+/* 설정 버튼들 */
+.settings-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.tts-settings-button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.vad-settings-button.active {
+  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+  border-color: rgba(33, 150, 243, 0.5);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.vad-toggle-button.active {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  border-color: rgba(76, 175, 80, 0.5);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* 설정 패널 */
+.settings-panel {
+  margin: 20px 0;
+  animation: slideDown 0.3s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* TTS 설정 패널 */
+.tts-settings-panel {
+  margin: 30px 0;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.settings-header h3 {
+  margin: 0 0 5px 0;
+  font-size: 20px;
+  color: #fff;
+}
+
+.settings-header p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 베놈 아바타 공간 */
+.venom-avatar-space {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.venom-placeholder {
+  text-align: center;
+  animation: breathe 3s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.venom-shape {
+  width: 120px;
+  height: 140px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+  border-radius: 60px 60px 40px 40px;
+  position: relative;
+  margin: 0 auto 15px;
+  box-shadow: 
+    0 0 30px rgba(255, 0, 0, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* 베놈 상태별 애니메이션 */
+.venom-shape.listening {
+  animation: listening-pulse 1.5s ease-in-out infinite;
+  box-shadow: 
+    0 0 40px rgba(33, 150, 243, 0.5),
+    inset 0 0 20px rgba(33, 150, 243, 0.2);
+}
+
+@keyframes listening-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(33, 150, 243, 0.5); }
+  50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(33, 150, 243, 0.8); }
+}
+
+.venom-shape.thinking {
+  animation: thinking-rotate 2s linear infinite;
+  box-shadow: 
+    0 0 40px rgba(156, 39, 176, 0.5),
+    inset 0 0 20px rgba(156, 39, 176, 0.2);
+}
+
+@keyframes thinking-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.venom-shape.talking {
+  animation: talking-bounce 0.5s ease-in-out infinite alternate;
+  box-shadow: 
+    0 0 40px rgba(255, 152, 0, 0.5),
+    inset 0 0 20px rgba(255, 152, 0, 0.2);
+}
+
+@keyframes talking-bounce {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(1.2); }
+}
+
+.venom-shape.ready {
+  box-shadow: 
+    0 0 40px rgba(76, 175, 80, 0.5),
+    inset 0 0 20px rgba(76, 175, 80, 0.2);
+}
+
+/* 베놈 눈 */
+.venom-eyes {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px 20px 10px;
+}
+
+.eye {
+  width: 20px;
+  height: 25px;
+  background: #ff0000;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+  animation: blink 4s infinite;
+}
+
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+/* 베놈 입 */
+.venom-mouth {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  background: #000;
+  border-radius: 0 0 30px 30px;
+  border: 2px solid #ff0000;
+  overflow: hidden;
+}
+
+.teeth {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 8px;
+  background: linear-gradient(90deg, 
+    transparent 0%, white 10%, transparent 20%,
+    transparent 25%, white 35%, transparent 45%,
+    transparent 50%, white 60%, transparent 70%,
+    transparent 75%, white 85%, transparent 100%
+  );
+}
+
+.venom-status-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* 대화 모드 상태 */
+.conversation-mode-status {
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid rgba(33, 150, 243, 0.3);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.mode-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.mode-icon {
+  font-size: 18px;
+  animation: spin 2s linear infinite;
+}
+
+.mode-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2196f3;
+}
+
+.mode-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 수동 컨트롤 */
+.manual-controls, .listening-controls {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.manual-button, .stop-listening-button {
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.manual-button:hover, .stop-listening-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* 에러 표시 */
+.error-section {
+  margin-top: 20px;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: 10px;
+  color: #f44336;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.error-icon {
+  font-size: 18px;
+}
+
+.error-text {
+  flex: 1;
+  font-size: 14px;
+}
+
+.error-close {
+  background: none;
+  border: none;
+  color: #f44336;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .simple-voice-chat {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .main-button {
+    padding: 15px 20px;
+    font-size: 16px;
+  }
+  
+  .venom-shape {
+    width: 100px;
+    height: 120px;
+  }
+  
+  .status-message {
+    font-size: 16px;
+  }
+  
+  /* 설정 버튼 반응형 */
+  .settings-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .settings-panel {
+    margin: 15px -5px;
+  }
+  
+  .secondary-button {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+}
+
+/* 다크모드 최적화 */
+@media (prefers-color-scheme: dark) {
+  .simple-voice-chat {
+    background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #16213e 100%);
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,53 @@
+# 프론트엔드 .gitignore
+
+# 환경 변수
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 의존성
+node_modules/
+/.pnp
+.pnp.js
+
+# 테스트
+/coverage
+
+# 빌드
+/build
+/dist
+
+# 기타
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vite
+dist-ssr/
+*.local
+
+# IDE
+.vscode/
+.idea/
+
+# 로그
+logs/
+*.log
+
+# 런타임 데이터
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# 오디오 캐시
+audio_cache/
+recordings/

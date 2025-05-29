@@ -1,0 +1,506 @@
+/* 통합 프로그래스바 CSS */
+.unified-progress-bar {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 90vw;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  z-index: 10000;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.unified-progress-bar.hidden {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  pointer-events: none;
+}
+
+.unified-progress-bar.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* 프로그래스바 헤더 */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.stage-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stage-icon {
+  font-size: 24px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+.stage-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #718096;
+  font-weight: 500;
+}
+
+.processing-time {
+  color: #4299e1;
+  font-weight: 600;
+}
+
+.estimated-time {
+  color: #a0aec0;
+}
+
+/* 메인 프로그래스바 */
+.progress-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shine 2s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.progress-percentage {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 700;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+/* 메시지 영역 */
+.progress-message {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.main-message {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 5px;
+}
+
+.sub-message {
+  font-size: 12px;
+  color: #718096;
+  font-style: italic;
+}
+
+/* 단계별 세부 정보 */
+.stage-details {
+  margin-bottom: 20px;
+}
+
+.detail-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 10px;
+  border-left: 3px solid #667eea;
+}
+
+.detail-icon {
+  font-size: 14px;
+}
+
+.detail-text {
+  font-size: 12px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+/* 단계 진행 인디케이터 */
+.stage-progress-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.stage-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stage-step.completed {
+  background: rgba(72, 187, 120, 0.1);
+  border: 2px solid #48bb78;
+}
+
+.stage-step.active {
+  background: rgba(66, 153, 225, 0.1);
+  border: 2px solid #4299e1;
+  animation: pulse-active 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-active {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
+  }
+}
+
+.step-icon {
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #4a5568;
+  text-align: center;
+}
+
+.stage-step.completed .step-icon {
+  filter: grayscale(0);
+}
+
+.stage-step.active .step-icon {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+.step-connector {
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, #e2e8f0, #cbd5e0, #e2e8f0);
+  position: relative;
+  margin: 0 5px;
+}
+
+.step-connector:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #48bb78, #4299e1);
+  transition: width 0.5s ease;
+}
+
+.stage-step.completed + .step-connector:before {
+  width: 100%;
+}
+
+/* 단계별 커스텀 스타일 */
+.unified-progress-bar.stt:not(.venom) {
+  border-top: 4px solid #ed8936;
+}
+
+.unified-progress-bar.gpt:not(.venom) {
+  border-top: 4px solid #4299e1;
+}
+
+.unified-progress-bar.tts:not(.venom) {
+  border-top: 4px solid #48bb78;
+}
+
+/* 베놈 테마 단계별 스타일 */
+.unified-progress-bar.venom.stt {
+  border-top: 4px solid #ff6b6b;
+}
+
+.unified-progress-bar.venom.gpt {
+  border-top: 4px solid #ff4757;
+}
+
+.unified-progress-bar.venom.tts {
+  border-top: 4px solid #ff3742;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .unified-progress-bar {
+    width: 320px;
+    padding: 20px;
+  }
+
+  .stage-title {
+    font-size: 16px;
+  }
+
+  .stage-progress-indicator {
+    gap: 5px;
+  }
+
+  .step-connector {
+    width: 20px;
+  }
+
+  .stage-step {
+    padding: 6px;
+  }
+
+  .step-icon {
+    font-size: 14px;
+  }
+
+  .step-label {
+    font-size: 9px;
+  }
+}
+
+/* 베놈 테마 스타일 */
+.unified-progress-bar.venom {
+  background: linear-gradient(145deg, #1a1a1a 0%, #2d1b1b 100%);
+  border: 2px solid #ff6b6b;
+  box-shadow: 
+    0 20px 60px rgba(255, 107, 107, 0.4),
+    0 0 30px rgba(255, 107, 107, 0.2),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.unified-progress-bar.venom .stage-title {
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+.unified-progress-bar.venom .main-message {
+  color: #ff8a8a;
+  text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+}
+
+.unified-progress-bar.venom .sub-message {
+  color: #cc5555;
+}
+
+.unified-progress-bar.venom .detail-info.venom-detail {
+  background: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  border-radius: 10px;
+}
+
+.unified-progress-bar.venom .detail-text {
+  color: #ff9999;
+}
+
+.unified-progress-bar.venom .progress-percentage {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.unified-progress-bar.venom .stage-step.completed {
+  background: rgba(255, 107, 107, 0.1);
+  border: 2px solid #ff6b6b;
+}
+
+.unified-progress-bar.venom .stage-step.active {
+  background: rgba(255, 107, 107, 0.2);
+  border: 2px solid #ff4757;
+  animation: venom-pulse-active 1.5s ease-in-out infinite;
+}
+
+@keyframes venom-pulse-active {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+  }
+}
+
+.unified-progress-bar.venom .step-label {
+  color: #cc5555;
+}
+
+.unified-progress-bar.venom .step-connector:before {
+  background: linear-gradient(90deg, #ff6b6b, #ff4757);
+}
+
+.unified-progress-bar.venom .processing-time {
+  color: #ff6b6b;
+}
+
+.unified-progress-bar.venom .estimated-time {
+  color: #cc5555;
+}
+
+.unified-progress-bar.venom .progress-stats {
+  color: #cc5555;
+}
+
+/* 베놈 테마 특별 효과 */
+.unified-progress-bar.venom::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ff6b6b, #ff4757, #ff6b6b);
+  border-radius: 22px;
+  z-index: -1;
+  animation: venom-border-glow 3s ease-in-out infinite;
+}
+
+@keyframes venom-border-glow {
+  0%, 100% {
+    opacity: 0.8;
+    filter: blur(0px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(2px);
+  }
+}
+
+.unified-progress-bar.venom .stage-icon {
+  animation: venom-icon-bounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+@keyframes venom-icon-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-8px) rotate(-5deg);
+  }
+  60% {
+    transform: translateY(-4px) rotate(5deg);
+  }
+}
+
+/* 다크 모드 대응 */
+@media (prefers-color-scheme: dark) {
+  .unified-progress-bar:not(.venom) {
+    background: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .unified-progress-bar:not(.venom) .stage-title,
+  .unified-progress-bar:not(.venom) .main-message {
+    color: #e2e8f0;
+  }
+
+  .unified-progress-bar:not(.venom) .detail-text,
+  .unified-progress-bar:not(.venom) .step-label {
+    color: #cbd5e0;
+  }
+
+  .unified-progress-bar:not(.venom) .progress-percentage {
+    background: rgba(45, 55, 72, 0.9);
+    color: #e2e8f0;
+  }
+}
+
+/* 접근성 개선 */
+.unified-progress-bar {
+  outline: none;
+}
+
+.unified-progress-bar:focus-within {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* 로딩 애니메이션 변형 */
+@keyframes loading-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.unified-progress-bar.loading {
+  animation: loading-pulse 2s ease-in-out infinite;
+}

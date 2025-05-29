@@ -1,0 +1,127 @@
+# Zonos 프로젝트 .gitignore
+
+# 환경 변수 및 보안 파일
+.env
+.env.local
+.env.production
+.env.staging
+*.key
+*.pem
+firebase-credentials.json
+service-account.json
+
+# Python 관련
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 가상환경
+.venv/
+venv/
+ENV/
+env/
+.env/
+
+# PyTorch 모델 캐시
+.cache/
+*.pth
+*.bin
+*.safetensors
+models/
+checkpoints/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Node.js 관련
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# 빌드 결과
+dist/
+build/
+out/
+
+# 로그 파일
+logs/
+*.log
+log/
+
+# 임시 파일
+tmp/
+temp/
+*.tmp
+*.temp
+
+# 오디오 파일 (크기가 클 수 있음)
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.flac
+audio_cache/
+recordings/
+
+# IDE 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS 생성 파일
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 테스트 관련
+.coverage
+.pytest_cache/
+coverage/
+*.cover
+.hypothesis/
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+
+# 백업 파일
+*.bak
+*.backup
+
+# 문서 빌드
+docs/_build/
+site/
+
+# 기타
+*.pid
+*.seed
+*.pid.lock
+.nyc_output

@@ -1,0 +1,512 @@
+* =================================================================
+   EnhancedAnimatedAvatar.css - 애니메이션 아바타 스타일
+   ================================================================= */
+
+.enhanced-animated-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.enhanced-animated-avatar.large {
+  --avatar-size: 120px;
+  --font-size: 4rem;
+}
+
+.enhanced-animated-avatar.medium {
+  --avatar-size: 80px;
+  --font-size: 2.5rem;
+}
+
+.enhanced-animated-avatar.small {
+  --avatar-size: 60px;
+  --font-size: 2rem;
+}
+
+/* 🔥 아바타 컨테이너 */
+.avatar-container {
+  position: relative;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.avatar-container:hover {
+  transform: scale(1.05);
+}
+
+.avatar-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color, #4caf50), transparent);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.avatar-emoji {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size);
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+/* 🔥 상태 표시기 */
+.state-indicator {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid white;
+  z-index: 3;
+}
+
+.indicator-dot {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--accent-color, #4caf50);
+}
+
+.state-indicator.listening .indicator-dot {
+  background: #2196f3;
+  animation: pulse 1.5s infinite;
+}
+
+.state-indicator.thinking .indicator-dot {
+  background: #9c27b0;
+  animation: thinking-pulse 1s infinite;
+}
+
+.state-indicator.speaking .indicator-dot {
+  background: #ff9800;
+  animation: speaking-pulse 0.8s infinite;
+}
+
+/* 🔥 특별 효과들 */
+.listening-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ring {
+  position: absolute;
+  border: 2px solid #2196f3;
+  border-radius: 50%;
+  opacity: 0;
+  animation: listening-ring 2s infinite;
+}
+
+.ring-1 {
+  width: 80px;
+  height: 80px;
+  margin: -40px;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 100px;
+  height: 100px;
+  margin: -50px;
+  animation-delay: 0.5s;
+}
+
+.ring-3 {
+  width: 120px;
+  height: 120px;
+  margin: -60px;
+  animation-delay: 1s;
+}
+
+@keyframes listening-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+.speaking-waves {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wave {
+  position: absolute;
+  width: 4px;
+  background: #ff9800;
+  border-radius: 2px;
+  animation: speaking-wave 0.6s infinite;
+}
+
+.wave-1 {
+  height: 20px;
+  left: -10px;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  height: 30px;
+  left: 0px;
+  animation-delay: 0.2s;
+}
+
+.wave-3 {
+  height: 20px;
+  left: 10px;
+  animation-delay: 0.4s;
+}
+
+@keyframes speaking-wave {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+
+.thinking-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.particle {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0;
+  animation: thinking-particle 3s infinite;
+}
+
+.particle-1 {
+  top: 10%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.particle-2 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 1s;
+}
+
+.particle-3 {
+  bottom: 10%;
+  right: 20%;
+  animation-delay: 2s;
+}
+
+@keyframes thinking-particle {
+  0%, 100% { opacity: 0; transform: translateY(0px) scale(0.8); }
+  50% { opacity: 1; transform: translateY(-10px) scale(1); }
+}
+
+/* 🔥 애니메이션 클래스들 */
+.gentle-pulse {
+  animation: gentle-pulse 3s infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.listening-bounce {
+  animation: listening-bounce 0.8s infinite;
+}
+
+@keyframes listening-bounce {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.thinking-rotate {
+  animation: thinking-rotate 2s infinite;
+}
+
+@keyframes thinking-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(15deg); }
+}
+
+.speaking-wave {
+  animation: speaking-wave-container 0.6s infinite;
+}
+
+@keyframes speaking-wave-container {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.loading-spin {
+  animation: loading-spin 1s linear infinite;
+}
+
+@keyframes loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-shake {
+  animation: error-shake 0.5s ease-in-out 3;
+}
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.happy-bounce {
+  animation: happy-bounce 0.8s infinite;
+}
+
+@keyframes happy-bounce {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-8px) scale(1.05); }
+}
+
+.surprised-jump {
+  animation: surprised-jump 0.6s ease-out;
+}
+
+@keyframes surprised-jump {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-15px) scale(1.1); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+/* 🔥 메시지 말풍선 */
+.message-bubble {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  padding: 0.75rem 1rem;
+  border-radius: 15px;
+  max-width: 250px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.message-bubble.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.message-bubble.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.message-content {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.message-arrow {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(255, 255, 255, 0.95);
+}
+
+/* 🔥 타이핑 표시기 */
+.typing-indicator {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.typing-indicator .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--message-color, #666);
+  border-radius: 50%;
+  animation: typing-dot 1.4s infinite;
+}
+
+.typing-indicator .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+  30% { opacity: 1; transform: scale(1); }
+}
+
+/* 🔥 상태 레이블 */
+.state-label {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.state-text {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 🔥 진행바 */
+.progress-container {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  animation: progress-fill 2s infinite;
+}
+
+.progress-fill.thinking {
+  background: linear-gradient(90deg, #9c27b0, #e1bee7);
+}
+
+.progress-fill.loading {
+  background: linear-gradient(90deg, #607d8b, #cfd8dc);
+}
+
+.progress-fill.speaking {
+  background: linear-gradient(90deg, #ff9800, #ffcc02);
+}
+
+@keyframes progress-fill {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+/* 🔥 대화 아바타 특별 스타일 */
+.conversation-avatar {
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 🔥 반응형 디자인 */
+@media (max-width: 768px) {
+  .simple-voice-chat {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+  
+  .main-button {
+    min-width: 250px;
+    padding: 1rem 1.5rem;
+  }
+  
+  .button-text {
+    font-size: 1rem;
+  }
+  
+  .button-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .mode-stats {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .enhanced-animated-avatar.large {
+    --avatar-size: 100px;
+    --font-size: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .simple-voice-chat {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .main-button {
+    min-width: 200px;
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .secondary-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .enhanced-animated-avatar.large {
+    --avatar-size: 80px;
+    --font-size: 2.5rem;
+  }
+}
+
+/* 🔥 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .message-bubble {
+    background: rgba(50, 50, 50, 0.95);
+    color: #fff;
+  }
+  
+  .message-arrow {
+    border-bottom-color: rgba(50, 50, 50, 0.95);
+  }
+}
+
+/* 🔥 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 🔥 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  .simple-voice-chat {
+    border: 2px solid white;
+  }
+  
+  .main-button {
+    border: 2px solid currentColor;
+  }
+  
+  .status-indicator {
+    border: 2px solid white;
+  }
+}
