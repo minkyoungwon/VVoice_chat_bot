@@ -1,11 +1,16 @@
-/* 전체 앱 스타일 */
+/* =================================================================
+   App.css - 흰색 메인 + 보라색 포인트 통일 테마
+   ================================================================= */
+
+/* 전체 앱 스타일 - 흰색 배경 + 보라색 테마 */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #333;
+  background: #ffffff;
+  color: #333333;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
 }
 
 /* 🔥 메인 컨테이너 - 사이드바와 함께 작동 */
@@ -14,48 +19,116 @@
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
+  background: #ffffff;
 }
 
-.main-container.sidebar-open {
-  margin-left: 300px;
+/* 데스크톱에서 사이드바 열릴 때 */
+.app.desktop .main-container.sidebar-open {
+  margin-left: 320px;
 }
 
-.main-container.sidebar-closed {
+.app.desktop .main-container.sidebar-closed {
   margin-left: 0;
 }
 
+/* 모바일에서는 오버레이 모드 */
+.app.mobile .main-container {
+  margin-left: 0;
+}
+
+/* 🔥 헤더 - 보라색 그라디언트 */
 .app-header {
-  background: rgba(255, 255, 255, 0.95);
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
   backdrop-filter: blur(10px);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(156, 39, 176, 0.15);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 100;
 }
 
 .app-header h1 {
   margin: 0;
-  color: #4a5568;
+  color: white;
   font-size: 1.8rem;
+  font-weight: 600;
 }
 
-/* 탭 네비게이션 */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-dot.connected {
+  background: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}
+
+.status-dot.disconnected {
+  background: #f44336;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
+}
+
+.status-text {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.sidebar-toggle-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔥 탭 네비게이션 - 흰색 배경에 보라색 포인트 */
 .tab-navigation {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(156, 39, 176, 0.03);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
   gap: 1rem;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(156, 39, 176, 0.05);
 }
 
 .tab-button {
   padding: 0.8rem 2rem;
-  border: 2px solid rgba(102, 126, 234, 0.3);
-  background: transparent;
-  color: #667eea;
+  border: 2px solid rgba(156, 39, 176, 0.2);
+  background: white;
+  color: #9c27b0;
   border-radius: 25px;
   font-size: 1rem;
   font-weight: 600;
@@ -65,21 +138,22 @@
 }
 
 .tab-button:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(156, 39, 176, 0.05);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.15);
+  border-color: rgba(156, 39, 176, 0.4);
 }
 
 .tab-button.active {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
   color: white;
-  border-color: #667eea;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  border-color: #9c27b0;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
 }
 
 .tab-button.active:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
 .status-bar {
@@ -97,30 +171,53 @@
 }
 
 .status-indicator.connected {
-  background: #48bb78;
+  background: #4caf50;
   color: white;
 }
 
 .status-indicator.disconnected {
-  background: #f56565;
+  background: #f44336;
   color: white;
 }
 
 .status-indicator.recording {
-  background: #ed8936;
+  background: #9c27b0; /* 보라색으로 통일 */
   color: white;
   animation: pulse 1.5s infinite;
 }
 
 .status-indicator.speaking {
-  background: #4299e1;
+  background: #673ab7; /* 더 진한 보라색 */
   color: white;
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* 🔥 메인 콘텐츠 - 흰색 배경 */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: #ffffff;
+}
+
+.chat-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.chat-history-section {
+  flex: 1;
+}
+
+.voice-control-section {
+  flex: none;
 }
 
 .app-main {
@@ -133,7 +230,7 @@
   width: 100%;
 }
 
-/* TTS 패널 */
+/* 🔥 TTS 패널 */
 .tts-panel {
   width: 100%;
   display: flex;
@@ -141,11 +238,14 @@
 }
 
 .tts-panel .tts-progress-container {
-  background: transparent;
+  background: white;
+  border: 1px solid rgba(156, 39, 176, 0.1);
+  border-radius: 15px;
   min-height: auto;
-  padding: 0;
+  padding: 1.5rem;
   max-width: 900px;
   width: 100%;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.08);
 }
 
 .left-panel {
@@ -159,13 +259,13 @@
   flex: 1;
 }
 
-/* 음성 채팅 컴포넌트 */
+/* 🔥 음성 채팅 컴포넌트 - 흰색 기반 */
 .voice-chat {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: white;
+  border: 1px solid rgba(156, 39, 176, 0.15);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(156, 39, 176, 0.08);
 }
 
 .connection-controls, .voice-controls {
@@ -174,6 +274,7 @@
   margin-bottom: 1.5rem;
 }
 
+/* 🔥 버튼 스타일 - 보라색 테마로 통일 */
 .connect-button, .disconnect-button, .record-button, .stop-button {
   padding: 1rem 2rem;
   border: none;
@@ -185,13 +286,13 @@
   min-width: 200px;
 }
 
-/* 🔥 연속 모드 관련 스타일 추가 */
+/* 🔥 연속 모드 관련 스타일 */
 .continuous-mode-controls {
   margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: rgba(102, 126, 234, 0.05);
+  padding: 1.5rem;
+  background: rgba(156, 39, 176, 0.03);
   border-radius: 15px;
-  border: 2px solid rgba(102, 126, 234, 0.1);
+  border: 2px solid rgba(156, 39, 176, 0.1);
 }
 
 .mode-toggle {
@@ -217,7 +318,7 @@
   position: relative;
   width: 50px;
   height: 24px;
-  background: #ccc;
+  background: #e2e8f0;
   border-radius: 12px;
   transition: all 0.3s ease;
 }
@@ -236,7 +337,7 @@
 }
 
 .toggle-label input:checked + .toggle-slider {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
 }
 
 .toggle-label input:checked + .toggle-slider:before {
@@ -250,10 +351,10 @@
 
 .continuous-mode-info {
   text-align: center;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(156, 39, 176, 0.15);
 }
 
 .info-text {
@@ -283,7 +384,7 @@
 .continuous-mode-status {
   margin-top: 1rem;
   padding: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
   color: white;
   border-radius: 15px;
   text-align: center;
@@ -344,23 +445,24 @@
 }
 
 .record-button.continuous {
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
   animation: continuous-glow 2s ease-in-out infinite;
 }
 
 @keyframes continuous-glow {
-  0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
-  50% { box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6); }
+  0%, 100% { box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3); }
+  50% { box-shadow: 0 6px 25px rgba(156, 39, 176, 0.6); }
 }
 
+/* 🔥 주요 버튼들 - 보라색 계열로 통일 */
 .connect-button {
-  background: linear-gradient(45deg, #48bb78, #38a169);
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
   color: white;
 }
 
 .connect-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
 .disconnect-button {
@@ -374,31 +476,33 @@
 }
 
 .record-button {
-  background: linear-gradient(45deg, #ed8936, #dd6b20);
+  background: linear-gradient(45deg, #9c27b0, #7b1fa2); /* 보라색으로 변경 */
   color: white;
 }
 
 .record-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(237, 137, 54, 0.4);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
 .stop-button {
-  background: linear-gradient(45deg, #4299e1, #3182ce);
+  background: linear-gradient(45deg, #673ab7, #512da8); /* 진한 보라색 */
   color: white;
 }
 
 .stop-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+  box-shadow: 0 6px 20px rgba(103, 58, 183, 0.4);
 }
 
+/* 🔥 상태 표시 */
 .status-display {
   text-align: center;
   padding: 1rem;
-  background: rgba(74, 85, 104, 0.05);
+  background: rgba(156, 39, 176, 0.03);
   border-radius: 15px;
   margin-bottom: 1rem;
+  border: 1px solid rgba(156, 39, 176, 0.1);
 }
 
 .connection-status, .recording-status, .speaking-status, .current-transcript {
@@ -409,18 +513,19 @@
 .current-transcript {
   font-style: italic;
   color: #4a5568;
-  background: rgba(66, 153, 225, 0.1);
+  background: rgba(156, 39, 176, 0.05);
   padding: 0.5rem;
   border-radius: 10px;
+  border: 1px solid rgba(156, 39, 176, 0.1);
 }
 
-/* 메시지 리스트 */
+/* 🔥 메시지 리스트 - 흰색 기반 */
 .message-list {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: white;
+  border: 1px solid rgba(156, 39, 176, 0.15);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(156, 39, 176, 0.08);
   height: 600px;
   display: flex;
   flex-direction: column;
@@ -432,18 +537,18 @@
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid rgba(74, 85, 104, 0.1);
+  border-bottom: 2px solid rgba(156, 39, 176, 0.1);
 }
 
 .message-list-header h3 {
   margin: 0;
-  color: #4a5568;
+  color: #9c27b0;
 }
 
 .clear-button {
   padding: 0.5rem 1rem;
   border: 2px solid #f56565;
-  background: transparent;
+  background: white;
   color: #f56565;
   border-radius: 25px;
   cursor: pointer;
@@ -454,6 +559,8 @@
 .clear-button:hover {
   background: #f56565;
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(245, 101, 101, 0.3);
 }
 
 .messages-container {
@@ -467,13 +574,17 @@
 }
 
 .messages-container::-webkit-scrollbar-track {
-  background: rgba(74, 85, 104, 0.1);
+  background: rgba(156, 39, 176, 0.1);
   border-radius: 3px;
 }
 
 .messages-container::-webkit-scrollbar-thumb {
-  background: rgba(74, 85, 104, 0.3);
+  background: rgba(156, 39, 176, 0.3);
   border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 39, 176, 0.5);
 }
 
 .empty-messages {
@@ -489,23 +600,27 @@
   transition: all 0.3s ease;
 }
 
+/* 🔥 메시지 스타일 - 보라색 계열로 통일 */
 .user-message {
-  background: linear-gradient(45deg, #4299e1, #3182ce);
+  background: linear-gradient(45deg, #9c27b0, #7b1fa2);
   color: white;
   margin-left: 20%;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.2);
 }
 
 .assistant-message {
-  background: linear-gradient(45deg, #48bb78, #38a169);
+  background: linear-gradient(45deg, #673ab7, #512da8);
   color: white;
   margin-right: 20%;
+  box-shadow: 0 4px 15px rgba(103, 58, 183, 0.2);
 }
 
 .system-message {
-  background: rgba(74, 85, 104, 0.1);
-  color: #4a5568;
+  background: rgba(156, 39, 176, 0.05);
+  color: #9c27b0;
   text-align: center;
   font-size: 0.9rem;
+  border: 1px solid rgba(156, 39, 176, 0.1);
 }
 
 .message-header {
@@ -534,20 +649,20 @@
   line-height: 1.5;
 }
 
-/* 설정 패널 */
+/* 🔥 설정 패널 - 흰색 기반 */
 .settings {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: white;
+  border: 1px solid rgba(156, 39, 176, 0.15);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(156, 39, 176, 0.08);
 }
 
 .settings-toggle {
   width: 100%;
   padding: 1rem;
   border: none;
-  background: linear-gradient(45deg, #805ad5, #6b46c1);
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
   color: white;
   border-radius: 15px;
   font-size: 1.1rem;
@@ -558,7 +673,7 @@
 
 .settings-toggle:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(128, 90, 213, 0.4);
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.4);
 }
 
 .settings-panel {
@@ -568,12 +683,12 @@
 .setting-group {
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(74, 85, 104, 0.1);
+  border-bottom: 1px solid rgba(156, 39, 176, 0.1);
 }
 
 .setting-group h4 {
   margin: 0 0 1rem 0;
-  color: #4a5568;
+  color: #9c27b0;
   font-size: 1.1rem;
 }
 
@@ -591,20 +706,28 @@
 .setting-item input[type="range"] {
   width: 100%;
   margin-bottom: 0.5rem;
+  accent-color: #9c27b0;
 }
 
 .setting-item select {
   width: 100%;
   padding: 0.5rem;
-  border: 2px solid rgba(74, 85, 104, 0.2);
+  border: 2px solid rgba(156, 39, 176, 0.2);
   border-radius: 10px;
   background: white;
   font-size: 1rem;
 }
 
+.setting-item select:focus {
+  outline: none;
+  border-color: #9c27b0;
+  box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+}
+
 .setting-item input[type="checkbox"] {
   transform: scale(1.2);
   margin-left: 0.5rem;
+  accent-color: #9c27b0;
 }
 
 .emotion-item {
@@ -632,9 +755,9 @@
 
 .reset-button {
   padding: 0.8rem 2rem;
-  border: 2px solid #805ad5;
-  background: transparent;
-  color: #805ad5;
+  border: 2px solid #9c27b0;
+  background: white;
+  color: #9c27b0;
   border-radius: 25px;
   cursor: pointer;
   font-weight: 500;
@@ -642,11 +765,13 @@
 }
 
 .reset-button:hover {
-  background: #805ad5;
+  background: #9c27b0;
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(156, 39, 176, 0.3);
 }
 
-/* 에러 메시지 */
+/* 🔥 에러 메시지 */
 .error-message, .global-error {
   background: linear-gradient(45deg, #f56565, #e53e3e);
   color: white;
@@ -656,15 +781,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.error-message button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.2rem;
+  box-shadow: 0 4px 15px rgba(245, 101, 101, 0.2);
 }
 
 .global-error {
@@ -676,30 +793,77 @@
   animation: slideIn 0.3s ease;
 }
 
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.error-icon {
+  font-size: 18px;
+}
+
+.error-message-text {
+  flex: 1;
+}
+
+.error-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: opacity 0.2s ease;
+}
+
+.error-close:hover {
+  opacity: 0.8;
+}
+
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* 푸터 */
+/* 🔥 푸터 */
 .app-footer {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: white;
   text-align: center;
   padding: 1rem;
   color: #a0aec0;
   font-size: 0.9rem;
+  border-top: 1px solid rgba(156, 39, 176, 0.1);
 }
 
 .app-footer p {
   margin: 0.2rem 0;
 }
 
-/* 반응형 디자인 */
+/* 🔥 사이드바 오버레이 - 모바일에서만 표시 */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  display: none;
+  backdrop-filter: blur(3px);
+}
+
+/* 모바일에서만 오버레이 표시 */
+.sidebar-overlay.mobile-only {
+  display: block;
+}
+
+/* 🔥 반응형 디자인 */
 @media (max-width: 768px) {
-  /* 🔥 모바일에서 사이드바 오버레이 모드 */
-  .main-container.sidebar-open {
-    margin-left: 0;
+  /* 모바일에서 사이드바는 오버레이 모드 */
+  .app.mobile .main-container {
+    margin-left: 0 !important;
   }
   
   .app-main {
@@ -743,6 +907,22 @@
   .tts-panel .tts-progress-container {
     padding: 1rem;
   }
+  
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .chat-container {
+    gap: 1rem;
+  }
 }
 
 /* 버튼 비활성화 상태 */
@@ -758,12 +938,49 @@ button:disabled {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid rgba(156, 39, 176, 0.3);
   border-radius: 50%;
-  border-top-color: #fff;
+  border-top-color: #9c27b0;
   animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* 🔥 호버 효과 개선 - 모든 요소에 적용 */
+.voice-chat:hover {
+  box-shadow: 0 12px 40px rgba(156, 39, 176, 0.12);
+  transform: translateY(-2px);
+}
+
+.message-list:hover {
+  box-shadow: 0 12px 40px rgba(156, 39, 176, 0.12);
+  transform: translateY(-2px);
+}
+
+.settings:hover {
+  box-shadow: 0 12px 40px rgba(156, 39, 176, 0.12);
+  transform: translateY(-2px);
+}
+
+.message:hover {
+  transform: scale(1.02);
+}
+
+/* 포커스 상태 개선 */
+button:focus,
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.2);
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

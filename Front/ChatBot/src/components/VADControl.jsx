@@ -11,12 +11,12 @@ const VADControl = ({
 }) => {
   // 🔥 VAD 설정 상태
   const [vadSettings, setVadSettings] = useState({
-    voiceThreshold: 0.08,        // 음성 감지 임계값 (0~1)
-    silenceThreshold: 0.03,      // 정적 감지 임계값 (0~1)
-    minVoiceDuration: 300,       // 최소 음성 지속 시간 (ms)
-    maxSilenceDuration: 1200,    // 최대 정적 지속 시간 (ms)
-    bufferDuration: 300,         // 버퍼 지속 시간 (ms)
-    sensitivity: 'medium',       // 민감도 프리셋 (low, medium, high, custom)
+    voiceThreshold: 0.06,        // 음성 감지 임계값 0.08 → 0.06으로 더 민감하게
+    silenceThreshold: 0.025,     // 정적 감지 임계값 0.03 → 0.025로 더 민감하게
+    minVoiceDuration: 250,       // 최소 음성 지속 시간 300 → 250으로 빠르게
+    maxSilenceDuration: 1000,    // 최대 정적 지속 시간 1200 → 1000으로 빠르게
+    bufferDuration: 250,         // 버퍼 지속 시간 300 → 250으로 빠르게
+    sensitivity: 'medium',       // 민감도 프리셋 (low, medium, high, ultra, custom)
     ...currentSettings.vadConfig
   });
 
@@ -36,24 +36,35 @@ const VADControl = ({
     medium: {
       label: '보통',
       description: '일반적인 대화 환경에 적합',
-      voiceThreshold: 0.08,
-      silenceThreshold: 0.03,
-      minVoiceDuration: 300,
-      maxSilenceDuration: 1200,
-      bufferDuration: 300,
+      voiceThreshold: 0.06,   // 🔥 기본값과 일치시키기
+      silenceThreshold: 0.025, // 🔥 기본값과 일치시키기
+      minVoiceDuration: 250,   // 🔥 기본값과 일치시키기
+      maxSilenceDuration: 1000, // 🔥 기본값과 일치시키기
+      bufferDuration: 250,     // 🔥 기본값과 일치시키기
       color: '#ffc107',
       icon: '🔊'
     },
     high: {
       label: '높음',
       description: '작은 소리도 민감하게 감지',
-      voiceThreshold: 0.04,
-      silenceThreshold: 0.02,
+      voiceThreshold: 0.02,  // 🔥 4% → 2%로 더 민감하게
+      silenceThreshold: 0.01, // 🔥 2% → 1%로 더 민감하게
       minVoiceDuration: 200,
       maxSilenceDuration: 800,
       bufferDuration: 200,
       color: '#dc3545',
       icon: '📢'
+    },
+    ultra: {
+      label: '매우 높음',
+      description: '극도로 민감한 감지 (조용한 환경 전용)',
+      voiceThreshold: 0.01,  // 🔥 1% 매우 민감한 설정
+      silenceThreshold: 0.005, // 🔥 0.5% 매우 민감한 설정
+      minVoiceDuration: 150,
+      maxSilenceDuration: 600,
+      bufferDuration: 150,
+      color: '#e83e8c',
+      icon: '🎯'
     },
     custom: {
       label: '사용자 정의',

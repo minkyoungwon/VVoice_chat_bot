@@ -7,8 +7,25 @@ import './App.css';
 
 function App() {
   const { isConnected, isRecording, isSpeaking, error, messages } = useChatStore();
-  const [sidebarOpen, setSidebarOpen] = useState(true); // 기본적으로 사이드바 열림
+  const [sidebarOpen, setSidebarOpen] = useState(false); // 기본적으로 사이드바 숨김
   const [sessionStartTime, setSessionStartTime] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // 모바일 감지
+  
+  // 🔥 화면 크기 감지
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      
+      // 모바일에서 데스크톱으로 전환 시 사이드바 자동 열기
+      if (!mobile && !sidebarOpen) {
+        setSidebarOpen(true);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [sidebarOpen]);
   
   // 🔥 아바타 상태 계산 (더 정확하게)
   const getAvatarState = () => {
@@ -72,12 +89,24 @@ function App() {
     }
   }, [isConnected, sessionStartTime]);
   
+  // 🔥 사이드바 토글 핸들러
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+  
+  // 🔥 오버레이 클릭 핸들러 (모바일에서만 동작)
+  const handleOverlayClick = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
+  
   return (
-    <div className={`app ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+    <div className={`app ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'} ${isMobile ? 'mobile' : 'desktop'}`}>
       {/* 🔥 개선된 사이드바 */}
       <EnhancedSidebar 
         isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        onToggle={handleSidebarToggle}
         avatarState={getAvatarState()}
         currentMessage={getCurrentMessage()}
         conversationStats={getConversationStats()}
@@ -87,8 +116,19 @@ function App() {
         }}
       />
       
+      {/* 🔥 모바일 오버레이 - 모바일에서만 표시되고 호버 차단 방지 */}
+      {sidebarOpen && isMobile && (
+        <div 
+          className="sidebar-overlay mobile-only"
+          onClick={handleOverlayClick}
+          role="button"
+          tabIndex={-1}
+          aria-label="사이드바 닫기"
+        />
+      )}
+      
       {/* 메인 컨테이너 */}
-      <div className="main-container">
+      <div className={`main-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
         {/* 🔥 간단한 헤더 */}
         <header className="app-header">
           <div className="header-left">
@@ -105,7 +145,7 @@ function App() {
             {/* 사이드바 토글 버튼 (모바일/작은 화면용) */}
             <button 
               className="sidebar-toggle-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={handleSidebarToggle}
               title={sidebarOpen ? '사이드바 숨기기' : '사이드바 보기'}
             >
               {sidebarOpen ? '◀' : '▶'}
@@ -144,14 +184,6 @@ function App() {
           </div>
         )}
       </div>
-      
-      {/* 🔥 사이드바 오버레이 (모바일) */}
-      {sidebarOpen && (
-        <div 
-          className="sidebar-overlay"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 }

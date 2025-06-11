@@ -14,11 +14,11 @@ export const useVADRecorder = () => {
   
   // VAD 설정
   const vadConfigRef = useRef({
-    voiceThreshold: 0.1,     // 음성 감지 임계값 (0~1)
-    silenceThreshold: 0.05,  // 정적 감지 임계값 (0~1)
-    minVoiceDuration: 300,   // 최소 음성 지속 시간 (ms)
-    maxSilenceDuration: 1500, // 최대 정적 지속 시간 (ms) - 이 시간 후 자동 중지
-    bufferDuration: 500      // 녹음 시작 전 버퍼 시간 (ms)
+    voiceThreshold: 0.06,     // 🔥 음성 감지 임계값 0.1 → 0.06으로 더 민감하게
+    silenceThreshold: 0.025,  // 🔥 정적 감지 임계값 0.05 → 0.025로 더 민감하게
+    minVoiceDuration: 250,    // 🔥 최소 음성 지속 시간 300 → 250으로 더 빠르게
+    maxSilenceDuration: 1000, // 🔥 최대 정적 지속 시간 1500 → 1000으로 더 빠르게
+    bufferDuration: 400       // 🔥 녹음 시작 전 버퍼 시간 500 → 400으로 더 빠르게
   });
   
   // VAD 상태 추적

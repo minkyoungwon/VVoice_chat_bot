@@ -1,13 +1,14 @@
-/* SimpleVoiceChat.css - 개선된 스타일 */
+/* SimpleVoiceChat.css - 흰색 배경 + 보라색 테마 */
 
 .simple-voice-chat {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  background: white;
+  border: 1px solid rgba(156, 39, 176, 0.2);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  color: white;
+  box-shadow: 0 20px 40px rgba(156, 39, 176, 0.1);
+  color: #333;
 }
 
 /* 상태 표시 영역 */
@@ -20,9 +21,8 @@
   position: relative;
   padding: 20px;
   border-radius: 15px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(156, 39, 176, 0.05);
+  border: 1px solid rgba(156, 39, 176, 0.2);
   margin-bottom: 20px;
 }
 
@@ -47,6 +47,7 @@
   font-size: 18px;
   font-weight: 600;
   margin-left: 40px;
+  color: #333;
 }
 
 .processing-step {
@@ -56,17 +57,17 @@
   gap: 10px;
   margin-top: 15px;
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(156, 39, 176, 0.05);
   border-radius: 10px;
   font-size: 14px;
-  color: #e0e0e0;
+  color: #666;
 }
 
 .processing-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid #fff;
+  border: 2px solid rgba(156, 39, 176, 0.3);
+  border-top: 2px solid #9c27b0;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -96,7 +97,7 @@
 
 .transcript-text {
   font-size: 16px;
-  color: white;
+  color: #333;
   font-style: italic;
 }
 
@@ -143,7 +144,7 @@
 .vad-level-bar {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(156, 39, 176, 0.1);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -167,7 +168,7 @@
   padding: 20px 30px;
   border: none;
   border-radius: 15px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
   color: white;
   font-size: 18px;
   font-weight: 600;
@@ -177,14 +178,14 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(156, 39, 176, 0.3);
   position: relative;
   overflow: hidden;
 }
 
 .main-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 35px rgba(156, 39, 176, 0.4);
 }
 
 .main-button:active {
@@ -239,38 +240,12 @@
   margin-bottom: 15px;
 }
 
-.tts-settings-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.vad-settings-button.active {
-  background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
-  border-color: rgba(33, 150, 243, 0.5);
-  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-}
-
-.vad-toggle-button.active {
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-  border-color: rgba(76, 175, 80, 0.5);
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-}
-
-/* 설정 패널 */
-.settings-panel {
-  margin: 20px 0;
-  animation: slideDown 0.3s ease;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
 .secondary-button {
   padding: 12px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(156, 39, 176, 0.3);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(156, 39, 176, 0.05);
+  color: #9c27b0;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -278,44 +253,37 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  backdrop-filter: blur(10px);
 }
 
 .secondary-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(156, 39, 176, 0.1);
+  border-color: rgba(156, 39, 176, 0.4);
 }
 
 .secondary-button.active {
-  background: rgba(33, 150, 243, 0.3);
-  border-color: rgba(33, 150, 243, 0.5);
-}
-
-/* 설정 버튼들 */
-.settings-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 15px;
+  background: rgba(156, 39, 176, 0.2);
+  border-color: rgba(156, 39, 176, 0.5);
 }
 
 .tts-settings-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+  border-color: rgba(156, 39, 176, 0.5);
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+  color: white;
 }
 
 .vad-settings-button.active {
   background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
   border-color: rgba(33, 150, 243, 0.5);
   box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+  color: white;
 }
 
 .vad-toggle-button.active {
   background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   border-color: rgba(76, 175, 80, 0.5);
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  color: white;
 }
 
 /* 설정 패널 */
@@ -324,18 +292,7 @@
   animation: slideDown 0.3s ease;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-/* TTS 설정 패널 */
-.tts-settings-panel {
-  margin: 30px 0;
-  padding: 25px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  animation: slideDown 0.3s ease;
+  box-shadow: 0 8px 32px rgba(156, 39, 176, 0.1);
 }
 
 @keyframes slideDown {
@@ -351,27 +308,51 @@
 .settings-header h3 {
   margin: 0 0 5px 0;
   font-size: 20px;
-  color: #fff;
+  color: #9c27b0;
 }
 
 .settings-header p {
   margin: 0;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
 }
 
-/* 베놈 아바타 공간 */
-.venom-avatar-space {
+/* 아바타 공간 - 대화하기 누르면 react.svg 표시 */
+.avatar-space {
   margin: 40px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 200px;
+  background: rgba(156, 39, 176, 0.05);
+  border-radius: 15px;
+  border: 2px dashed rgba(156, 39, 176, 0.2);
+  transition: all 0.3s ease;
 }
 
-.venom-placeholder {
+.avatar-placeholder {
   text-align: center;
   animation: breathe 3s ease-in-out infinite;
+}
+
+.avatar-image {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 20px rgba(156, 39, 176, 0.3));
+  animation: float 4s ease-in-out infinite;
+}
+
+.avatar-image.listening {
+  animation: listening-pulse 1.5s ease-in-out infinite;
+}
+
+.avatar-image.thinking {
+  animation: thinking-rotate 2s linear infinite;
+}
+
+.avatar-image.talking {
+  animation: talking-bounce 0.5s ease-in-out infinite alternate;
 }
 
 @keyframes breathe {
@@ -379,37 +360,14 @@
   50% { transform: scale(1.05); }
 }
 
-.venom-shape {
-  width: 120px;
-  height: 140px;
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
-  border-radius: 60px 60px 40px 40px;
-  position: relative;
-  margin: 0 auto 15px;
-  box-shadow: 
-    0 0 30px rgba(255, 0, 0, 0.3),
-    inset 0 0 20px rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-/* 베놈 상태별 애니메이션 */
-.venom-shape.listening {
-  animation: listening-pulse 1.5s ease-in-out infinite;
-  box-shadow: 
-    0 0 40px rgba(33, 150, 243, 0.5),
-    inset 0 0 20px rgba(33, 150, 243, 0.2);
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes listening-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(33, 150, 243, 0.5); }
-  50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(33, 150, 243, 0.8); }
-}
-
-.venom-shape.thinking {
-  animation: thinking-rotate 2s linear infinite;
-  box-shadow: 
-    0 0 40px rgba(156, 39, 176, 0.5),
-    inset 0 0 20px rgba(156, 39, 176, 0.2);
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(33, 150, 243, 0.5)); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 30px rgba(33, 150, 243, 0.8)); }
 }
 
 @keyframes thinking-rotate {
@@ -417,79 +375,15 @@
   100% { transform: rotate(360deg); }
 }
 
-.venom-shape.talking {
-  animation: talking-bounce 0.5s ease-in-out infinite alternate;
-  box-shadow: 
-    0 0 40px rgba(255, 152, 0, 0.5),
-    inset 0 0 20px rgba(255, 152, 0, 0.2);
-}
-
 @keyframes talking-bounce {
   from { transform: scaleY(1); }
-  to { transform: scaleY(1.2); }
+  to { transform: scaleY(1.1); }
 }
 
-.venom-shape.ready {
-  box-shadow: 
-    0 0 40px rgba(76, 175, 80, 0.5),
-    inset 0 0 20px rgba(76, 175, 80, 0.2);
-}
-
-/* 베놈 눈 */
-.venom-eyes {
-  display: flex;
-  justify-content: space-between;
-  padding: 25px 20px 10px;
-}
-
-.eye {
-  width: 20px;
-  height: 25px;
-  background: #ff0000;
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-  animation: blink 4s infinite;
-}
-
-@keyframes blink {
-  0%, 90%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.1); }
-}
-
-/* 베놈 입 */
-.venom-mouth {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 20px;
-  background: #000;
-  border-radius: 0 0 30px 30px;
-  border: 2px solid #ff0000;
-  overflow: hidden;
-}
-
-.teeth {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 8px;
-  background: linear-gradient(90deg, 
-    transparent 0%, white 10%, transparent 20%,
-    transparent 25%, white 35%, transparent 45%,
-    transparent 50%, white 60%, transparent 70%,
-    transparent 75%, white 85%, transparent 100%
-  );
-}
-
-.venom-status-text {
+.avatar-status-text {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
+  color: #666;
+  margin-top: 15px;
   font-weight: 500;
 }
 
@@ -524,7 +418,7 @@
 
 .mode-description {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
 }
 
 /* 수동 컨트롤 */
@@ -536,18 +430,17 @@
 
 .manual-button, .stop-listening-button {
   padding: 12px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(156, 39, 176, 0.3);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(156, 39, 176, 0.05);
+  color: #9c27b0;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
 .manual-button:hover, .stop-listening-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(156, 39, 176, 0.1);
   transform: translateY(-1px);
 }
 
@@ -609,9 +502,9 @@
     font-size: 16px;
   }
   
-  .venom-shape {
+  .avatar-image {
     width: 100px;
-    height: 120px;
+    height: 100px;
   }
   
   .status-message {
@@ -631,13 +524,6 @@
   .secondary-button {
     font-size: 13px;
     padding: 10px 16px;
-  }
-}
-
-/* 다크모드 최적화 */
-@media (prefers-color-scheme: dark) {
-  .simple-voice-chat {
-    background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #16213e 100%);
   }
 }
 

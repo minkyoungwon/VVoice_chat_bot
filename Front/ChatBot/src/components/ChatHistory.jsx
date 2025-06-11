@@ -1,20 +1,20 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/ChatHistory.css';
 
 const ChatHistory = ({ messages = [] }) => {
   const messagesEndRef = useRef(null);
-  
-  // 🔥 새 메시지가 올 때 자동 스크롤
+  const [isExpanded, setIsExpanded] = useState(false);
+
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
+      messagesEndRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'end'
       });
     }
   }, [messages]);
-  
-  // 🔥 메시지 타입별 아이콘
+
   const getMessageIcon = (role) => {
     const icons = {
       user: '👤',
@@ -23,21 +23,19 @@ const ChatHistory = ({ messages = [] }) => {
     };
     return icons[role] || '💬';
   };
-  
-  // 🔥 메시지 시간 포맷
+
   const formatTime = (timestamp) => {
     if (!timestamp) return '';
-    
     const date = new Date(timestamp);
     const now = new Date();
     const diffMinutes = Math.floor((now - date) / (1000 * 60));
-    
+
     if (diffMinutes < 1) return '방금 전';
     if (diffMinutes < 60) return `${diffMinutes}분 전`;
-    
+
     const diffHours = Math.floor(diffMinutes / 60);
     if (diffHours < 24) return `${diffHours}시간 전`;
-    
+
     return date.toLocaleDateString('ko-KR', {
       month: 'short',
       day: 'numeric',
@@ -45,8 +43,7 @@ const ChatHistory = ({ messages = [] }) => {
       minute: '2-digit'
     });
   };
-  
-  // 🔥 빈 상태 표시
+
   const renderEmptyState = () => (
     <div className="empty-chat-state">
       <div className="empty-icon">💬</div>
@@ -61,42 +58,34 @@ const ChatHistory = ({ messages = [] }) => {
       </div>
     </div>
   );
-  
-  // 🔥 메시지 렌더링
+
   const renderMessage = (message, index) => {
     const isUser = message.role === 'user';
     const isSystem = message.role === 'system';
-    
+
     return (
-      <div 
+      <motion.div
         key={index}
         className={`message-item ${message.role}`}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        transition={{ duration: 0.2 }}
       >
-        {/* 메시지 아바타 */}
         <div className="message-avatar">
-          <span className="avatar-icon">
-            {getMessageIcon(message.role)}
-          </span>
+          <span className="avatar-icon">{getMessageIcon(message.role)}</span>
         </div>
-        
-        {/* 메시지 내용 */}
+
         <div className="message-content">
-          {/* 메시지 헤더 */}
           <div className="message-header">
             <span className="message-sender">
               {isUser ? '나' : isSystem ? '시스템' : 'AI 어시스턴트'}
             </span>
-            <span className="message-time">
-              {formatTime(message.timestamp)}
-            </span>
+            <span className="message-time">{formatTime(message.timestamp)}</span>
           </div>
-          
-          {/* 메시지 텍스트 */}
-          <div className="message-text">
-            {message.text}
-          </div>
-          
-          {/* 메시지 메타데이터 (있는 경우) */}
+
+          <div className="message-text">{message.text}</div>
+
           {message.metadata && (
             <div className="message-metadata">
               {message.metadata.source === 'voice_input' && (
@@ -113,53 +102,76 @@ const ChatHistory = ({ messages = [] }) => {
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     );
   };
-  
+
   return (
-    <div className="chat-history">
-      {/* 채팅 헤더 */}
-      <div className="chat-header">
-        <h3 className="chat-title">
-          <span className="title-icon">💬</span>
-          대화 기록
-        </h3>
-        <div className="message-count">
-          {messages.length > 0 ? `${messages.length}개 메시지` : '아직 메시지가 없어요'}
-        </div>
-      </div>
-      
-      {/* 메시지 리스트 */}
-      <div className="messages-container">
-        {messages.length === 0 ? (
-          renderEmptyState()
-        ) : (
-          <div className="messages-list">
-            {messages.map((message, index) => 
-              renderMessage(message, index)
+    <>
+      <motion.button
+        className={`chat-toggle-button ${isExpanded ? 'expanded' : 'collapsed'}`}
+        onClick={() => setIsExpanded(!isExpanded)}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={false}
+        animate={{
+          x: isExpanded ? -370 : 0,
+          rotate: isExpanded ? 180 : 0
+        }}
+        transition={{ duration: 0.3, ease: 'easeInOut' }}
+      >
+        <span className="toggle-icon">▶</span>
+        <span className="toggle-text">
+          {isExpanded ? '대화기록 숨기기' : '대화기록 보기'}
+        </span>
+      </motion.button>
+
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className="chat-history"
+            initial={{ x: 400, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 400, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="chat-header">
+              <h3 className="chat-title">
+                <span className="title-icon">💬</span>
+                대화 기록
+              </h3>
+              <div className="message-count">
+                {messages.length > 0 ? `${messages.length}개 메시지` : '아직 메시지가 없어요'}
+              </div>
+            </div>
+
+            <div className="messages-container">
+              {messages.length === 0 ? (
+                renderEmptyState()
+              ) : (
+                <div className="messages-list">
+                  {messages.map((message, index) => renderMessage(message, index))}
+                  <div ref={messagesEndRef} />
+                </div>
+              )}
+            </div>
+
+            {messages.length > 0 && (
+              <div className="chat-footer">
+                <div className="conversation-summary">
+                  <span className="summary-item">
+                    👤 내 메시지: {messages.filter((m) => m.role === 'user').length}개
+                  </span>
+                  <span className="summary-item">
+                    🤖 AI 답변: {messages.filter((m) => m.role === 'assistant').length}개
+                  </span>
+                </div>
+              </div>
             )}
-            
-            {/* 스크롤 앵커 */}
-            <div ref={messagesEndRef} />
-          </div>
+          </motion.div>
         )}
-      </div>
-      
-      {/* 채팅 푸터 */}
-      {messages.length > 0 && (
-        <div className="chat-footer">
-          <div className="conversation-summary">
-            <span className="summary-item">
-              👤 내 메시지: {messages.filter(m => m.role === 'user').length}개
-            </span>
-            <span className="summary-item">
-              🤖 AI 답변: {messages.filter(m => m.role === 'assistant').length}개
-            </span>
-          </div>
-        </div>
-      )}
-    </div>
+      </AnimatePresence>
+    </>
   );
 };
 

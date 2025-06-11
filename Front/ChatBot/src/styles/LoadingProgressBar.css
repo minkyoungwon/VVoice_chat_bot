@@ -1,0 +1,395 @@
+/* LoadingProgressBar.css - 백엔드 로딩 프로그래스바 스타일 */
+
+.loading-progress-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: overlayFadeIn 0.3s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.loading-progress-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(156, 39, 176, 0.3);
+  border: 2px solid rgba(156, 39, 176, 0.2);
+  animation: modalSlideIn 0.4s ease;
+  position: relative;
+}
+
+@keyframes modalSlideIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-30px) scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+/* 헤더 */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.progress-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-title h3 {
+  margin: 0;
+  color: #9c27b0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.progress-icon {
+  font-size: 1.8rem;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.progress-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.progress-close-btn:hover {
+  background: rgba(156, 39, 176, 0.1);
+  color: #9c27b0;
+}
+
+/* 모델 정보 */
+.progress-model-info {
+  background: rgba(156, 39, 176, 0.05);
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(156, 39, 176, 0.2);
+}
+
+.model-label {
+  color: #9c27b0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.model-name {
+  color: #333;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+  background: rgba(156, 39, 176, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 프로그래스 바 컨테이너 */
+.progress-container {
+  margin-bottom: 20px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(156, 39, 176, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
+}
+
+/* 진행률별 애니메이션 클래스 */
+.progress-fill.progress-start {
+  animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+.progress-fill.progress-normal {
+  animation: progressFlow 2s ease-in-out infinite;
+}
+
+.progress-fill.progress-high {
+  animation: progressSpark 1s ease-in-out infinite;
+}
+
+.progress-fill.progress-complete {
+  animation: progressComplete 0.5s ease;
+}
+
+@keyframes progressPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes progressFlow {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.02); }
+}
+
+@keyframes progressSpark {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+@keyframes progressComplete {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(1.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* 프로그래스 바 광택 효과 */
+.progress-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* 진행률 텍스트 */
+.progress-text {
+  text-align: center;
+}
+
+.progress-percentage {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #9c27b0;
+  text-shadow: 0 1px 2px rgba(156, 39, 176, 0.2);
+}
+
+/* 상태 메시지 영역 */
+.progress-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  min-height: 30px;
+}
+
+.status-message {
+  flex: 1;
+}
+
+.status-text {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* 로딩 스피너 */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-ring {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(156, 39, 176, 0.2);
+  border-top: 3px solid #9c27b0;
+  border-radius: 50%;
+  animation: spinnerRotate 1s linear infinite;
+}
+
+@keyframes spinnerRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 진행 단계 정보 */
+.progress-info {
+  margin-bottom: 15px;
+}
+
+.info-stage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(156, 39, 176, 0.05);
+  border-radius: 8px;
+  border-left: 4px solid #9c27b0;
+  transition: all 0.3s ease;
+}
+
+.info-stage.complete {
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: #4caf50;
+  animation: stageComplete 0.5s ease;
+}
+
+@keyframes stageComplete {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.stage-icon {
+  font-size: 1.1rem;
+  animation: stageIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes stageIconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.stage-text {
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* 하단 도움말 */
+.progress-footer {
+  border-top: 1px solid rgba(156, 39, 176, 0.1);
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.footer-tip {
+  color: #666;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.footer-tip strong {
+  color: #9c27b0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .loading-progress-modal {
+    padding: 20px;
+    margin: 20px;
+  }
+  
+  .progress-title h3 {
+    font-size: 1.2rem;
+  }
+  
+  .progress-icon {
+    font-size: 1.5rem;
+  }
+  
+  .progress-track {
+    height: 10px;
+  }
+  
+  .progress-percentage {
+    font-size: 1.1rem;
+  }
+  
+  .model-name {
+    font-size: 0.8rem;
+  }
+}
+
+/* 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .loading-progress-modal {
+    background: #1a1a1a;
+    color: white;
+    border-color: rgba(156, 39, 176, 0.4);
+  }
+  
+  .progress-title h3 {
+    color: #bb86fc;
+  }
+  
+  .progress-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .progress-percentage {
+    color: #bb86fc;
+  }
+  
+  .status-text,
+  .stage-text,
+  .footer-tip {
+    color: #e0e0e0;
+  }
+  
+  .progress-model-info,
+  .info-stage {
+    background: rgba(156, 39, 176, 0.15);
+  }
+  
+  .progress-close-btn:hover {
+    background: rgba(187, 134, 252, 0.1);
+    color: #bb86fc;
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  .loading-progress-overlay,
+  .loading-progress-modal,
+  .progress-fill,
+  .progress-icon,
+  .spinner-ring,
+  .stage-icon,
+  .progress-shine {
+    animation: none !important;
+  }
+  
+  .progress-fill {
+    transition: width 0.1s ease !important;
+  }
+}

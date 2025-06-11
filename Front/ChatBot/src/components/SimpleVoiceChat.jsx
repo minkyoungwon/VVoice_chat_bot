@@ -5,8 +5,13 @@ import { useVADRecorder } from '../hooks/useVAD';
 import useChatStore from '../store/chatStore';
 import FullScreenAvatar from './FullScreenAvatar';
 import TTSEmotionControl from './TTSEmotionControl';
+import VoiceTTSControl from './VoiceTTSControl';
 import VADControl from './VADControl';
+import LoadingProgressBar from './LoadingProgressBar';
 import '../styles/SimpleVoiceChat.css';
+
+// React SVG 이미지 import
+import reactSvg from '../assets/react.svg';
 
 const SimpleVoiceChat = () => {
   const {
@@ -27,14 +32,27 @@ const SimpleVoiceChat = () => {
   } = useChatStore();
   
   // 🔥 간단한 상태 관리
-  const [conversationActive, setConversationActive] = useState(false); // 연속 대화 모드
-  const [currentStatus, setCurrentStatus] = useState('disconnected'); // disconnected, ready, talking, listening, thinking
-  const [processingStep, setProcessingStep] = useState(''); // STT, GPT, TTS
-  const [showFullScreen, setShowFullScreen] = useState(false); // 전체 화면 모드
-  const [isVADEnabled, setIsVADEnabled] = useState(true); // VAD 기본 활성화
-  const [showTTSControls, setShowTTSControls] = useState(false); // TTS 감정 조절 UI 표시
-  const [showVADControls, setShowVADControls] = useState(false); // VAD 설정 UI 표시
-  const [currentSettings, setCurrentSettings] = useState({ // 현재 설정 상태
+  const [conversationActive, setConversationActive] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState('disconnected');
+  const [processingStep, setProcessingStep] = useState('');
+  const [showFullScreen, setShowFullScreen] = useState(false);
+  const [isVADEnabled, setIsVADEnabled] = useState(true);
+  const [showTTSControls, setShowTTSControls] = useState(false);
+  const [showVADControls, setShowVADControls] = useState(false);
+  const [showAvatar, setShowAvatar] = useState(false);
+  
+  // 🔥 LoadingProgressBar 상태 개선 - 더 명확한 상태 관리
+  const [loadingState, setLoadingState] = useState({
+    isVisible: false,
+    progress: 0,
+    status: '',
+    title: '로딩 중...',
+    modelName: '',
+    isComplete: false, // 완료 여부 추가
+    autoHideTimer: null // 타이머 참조 추가
+  });
+  
+  const [currentSettings, setCurrentSettings] = useState({
     tts_settings: {
       model: "Zyphra/Zonos-v0.1-tiny",
       emotion: "neutral",
@@ -73,6 +91,195 @@ const SimpleVoiceChat = () => {
   // 🔥 startListening을 ref로 저장 (의존성 순환 방지)
   const startListeningRef = useRef();
   
+  // 🔥 타이머 정리 함수
+  const clearAutoHideTimer = useCallback(() => {
+    if (loadingState.autoHideTimer) {
+      clearTimeout(loadingState.autoHideTimer);
+      setLoadingState(prev => ({ ...prev, autoHideTimer: null }));
+    }
+  }, [loadingState.autoHideTimer]);
+  
+  // 🔥 로딩 상태 초기화 함수
+  const resetLoadingState = useCallback(() => {
+    clearAutoHideTimer();
+    setLoadingState({
+      isVisible: false,
+      progress: 0,
+      status: '',
+      title: '로딩 중...',
+      modelName: '',
+      isComplete: false,
+      autoHideTimer: null
+    });
+  }, [clearAutoHideTimer]);
+  
+  // 🔥 로딩 완료 처리 함수
+  const completeLoading = useCallback((delay = 2000) => {
+    setLoadingState(prev => ({
+      ...prev,
+      isComplete: true,
+      progress: 100
+    }));
+    
+    const timer = setTimeout(() => {
+      resetLoadingState();
+    }, delay);
+    
+    setLoadingState(prev => ({ ...prev, autoHideTimer: timer }));
+  }, [resetLoadingState]);
+  
+  // 🔥 백엔드 로딩 메시지 처리 함수 개선
+  const handleBackendLoadingMessage = useCallback((data) => {
+    console.log('🔄 백엔드 로딩 메시지:', data);
+    
+    // 이미 완료된 상태면 새로운 로딩 메시지 무시 (단, 새로운 작업 시작은 제외)
+    if (loadingState.isComplete && !['model_loading_progress', 'generation_started'].includes(data.type)) {
+      return;
+    }
+    
+    switch (data.type) {
+      case 'model_loading_progress':
+        clearAutoHideTimer(); // 기존 타이머 제거
+        setLoadingState(prev => ({
+          ...prev,
+          isVisible: true,
+          progress: data.progress || 0,
+          status: data.status || '로딩 중...',
+          title: '모델 로드 중',
+          modelName: data.model || '',
+          isComplete: false
+        }));
+        break;
+        
+      case 'model_loading_complete':
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 100,
+          status: '로딩 완료!',
+          title: '모델 준비 완료'
+        }));
+        completeLoading(3000); // 3초 후 숨기기
+        break;
+        
+      case 'model_loading_error':
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 0,
+          status: `오류: ${data.error}`,
+          title: '로딩 실패',
+          isComplete: true
+        }));
+        completeLoading(5000); // 5초 후 숨기기 (에러는 더 오래 표시)
+        break;
+        
+      case 'model_warmup_start':
+        clearAutoHideTimer();
+        setLoadingState(prev => ({
+          ...prev,
+          isVisible: true,
+          progress: 80,
+          status: '모델 웜업 중...',
+          title: '성능 최적화',
+          modelName: data.model || '',
+          isComplete: false
+        }));
+        break;
+        
+      case 'model_warmup_complete':
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 100,
+          status: '웜업 완료!'
+        }));
+        completeLoading(2000); // 2초 후 숨기기
+        break;
+        
+      case 'cache_hit':
+        // 캐시 히트는 짧게 표시
+        setLoadingState({
+          isVisible: true,
+          progress: 100,
+          status: '캐시된 오디오 사용 중',
+          title: '🚀 초고속 처리',
+          modelName: '',
+          isComplete: false,
+          autoHideTimer: null
+        });
+        completeLoading(1000); // 1초 후 숨기기
+        break;
+        
+      case 'generation_started':
+        clearAutoHideTimer();
+        setLoadingState(prev => ({
+          ...prev,
+          isVisible: true,
+          progress: 10,
+          status: 'AI 음성 생성 시작...',
+          title: '음성 합성 중',
+          modelName: data.model || '',
+          isComplete: false
+        }));
+        break;
+        
+      case 'generation_metadata':
+        const rtf = data.rtf || 0;
+        const performance = rtf < 0.5 ? '🚀 초고속' : rtf < 1.0 ? '⚡ 빠름' : '⚠️ 보통';
+        
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 90,
+          status: `음성 생성 완료 (${performance})`,
+          title: '음성 재생 준비'
+        }));
+        break;
+        
+      case 'generation_complete':
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 100,
+          status: '음성 생성 완료!'
+        }));
+        completeLoading(1500); // 1.5초 후 숨기기
+        break;
+        
+      case 'connection_established':
+        const serverInfo = data.server_info || {};
+        setLoadingState(prev => ({
+          ...prev,
+          progress: 100,
+          status: '서버 연결 완료!',
+          title: '🎉 준비 완료',
+          modelName: serverInfo.device || ''
+        }));
+        completeLoading(2500); // 2.5초 후 숨기기
+        break;
+        
+      default:
+        // 기타 백엔드 처리 상태
+        if (data.status && (data.status.includes('로딩') || data.status.includes('처리'))) {
+          setLoadingState(prev => ({
+            ...prev,
+            isVisible: true,
+            status: data.status,
+            isComplete: false
+          }));
+        }
+        break;
+    }
+  }, [loadingState.isComplete, clearAutoHideTimer, completeLoading]);
+  
+  // 🔥 프로그래스바 수동 닫기 핸들러
+  const handleCloseProgressBar = useCallback(() => {
+    resetLoadingState();
+  }, [resetLoadingState]);
+  
+  // 🔥 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      clearAutoHideTimer();
+    };
+  }, [clearAutoHideTimer]);
+  
   // 🔥 설정 변경 핸들러
   const handleTTSSettingsChange = useCallback((newSettings) => {
     console.log('🎭 TTS 설정 변경:', newSettings);
@@ -84,13 +291,26 @@ const SimpleVoiceChat = () => {
     
     setCurrentSettings(updatedSettings);
     
-    // 연결된 상태에서만 서버에 설정 전송
     if (isConnected) {
+      // 🎤 목소리 설정을 tts_settings에 포함하여 전송
       conversationFlow.updateSettings({
         language: "ko",
-        ...newSettings,
+        tts_settings: {
+          ...currentSettings.tts_settings,
+          ...newSettings,
+          // 🔥 목소리 관련 데이터 명시적 전송
+          voice_id: newSettings.voice_id,
+          voice_audio_base64: newSettings.voice_audio_base64,
+          voice_file_path: newSettings.voice_file_path
+        },
         performance_mode: "fast",
         system_prompt: "친근하고 도움이 되는 AI 어시스턴트로서 간단하고 명확하게 대답해주세요. 한두 문장으로 답변해주세요."
+      });
+      
+      console.log('🔥 WebSocket으로 전송된 목소리 설정:', {
+        voice_id: newSettings.voice_id,
+        voice_audio_base64: newSettings.voice_audio_base64 ? '미미비참입력됨' : 'null',
+        voice_file_path: newSettings.voice_file_path
       });
     }
   }, [currentSettings, isConnected, conversationFlow]);
@@ -105,7 +325,6 @@ const SimpleVoiceChat = () => {
     
     setCurrentSettings(updatedSettings);
     
-    // VAD 녹음 중이면 새 설정 적용
     if (vadRecorder.isRecording && newSettings.vadConfig) {
       vadRecorder.updateVADConfig(newSettings.vadConfig);
     }
@@ -122,7 +341,6 @@ const SimpleVoiceChat = () => {
       setProcessingStep('GPT 응답 생성 중...');
     } else {
       if (conversationActiveRef.current) {
-        // 빈 음성이면 다시 듣기 시작
         setTimeout(() => {
           setCurrentStatus('listening');
           setProcessingStep('');
@@ -171,13 +389,12 @@ const SimpleVoiceChat = () => {
     setProcessingStep('');
     
     if (conversationActiveRef.current) {
-      // 🔥 연속 모드: 자동으로 다음 듣기 시작
       setTimeout(() => {
         setCurrentStatus('listening');
         if (startListeningRef.current) {
           startListeningRef.current();
         }
-      }, 1500); // 1.5초 후 자동 시작
+      }, 1500);
     } else {
       setCurrentStatus('ready');
     }
@@ -191,11 +408,19 @@ const SimpleVoiceChat = () => {
     setProcessingStep('');
     setSpeaking(false);
     setRecording(false);
-  }, [setError, setSpeaking, setRecording]);
+    
+    // 로딩 프로그래스바도 숨기기
+    resetLoadingState();
+  }, [setError, setSpeaking, setRecording, resetLoadingState]);
   
-  // 🔥 상태 변경 처리
+  // 🔥 상태 변경 처리 - 백엔드 로딩 메시지 포함
   const handleStateChange = useCallback((state, data) => {
     console.log('📊 상태 변경:', state, data);
+    
+    // 🔥 백엔드 로딩 관련 메시지 처리
+    if (data && typeof data === 'object' && data.type) {
+      handleBackendLoadingMessage(data);
+    }
     
     switch (state) {
       case 'connected':
@@ -206,22 +431,22 @@ const SimpleVoiceChat = () => {
         setConnected(false);
         setCurrentStatus('disconnected');
         setConversationActive(false);
+        resetLoadingState(); // 로딩바 숨기기
         break;
       case 'audio_stop_previous':
         audioPlayer.startNewAudio();
         break;
     }
-  }, [setConnected, audioPlayer]);
+  }, [setConnected, audioPlayer, handleBackendLoadingMessage, resetLoadingState]);
   
   // 🔥 VAD 이벤트 핸들러들
   const handleVoiceStart = useCallback(() => {
     console.log('🎤 VAD: 음성 시작 감지');
     
-    // 🔥 TTS 중에 음성이 감지되면 TTS 중단
     if (isSpeaking) {
       console.log('🔇 TTS 중에 음성 감지 - TTS 중단');
-      audioPlayer.stop(); // 오디오 재생 중단
-      conversationFlow.stopSpeaking(); // 서버에 TTS 중단 요청
+      audioPlayer.stop();
+      conversationFlow.stopSpeaking();
       setSpeaking(false);
       setCurrentStatus('listening');
       setProcessingStep('음성을 인식하고 있습니다...');
@@ -243,7 +468,6 @@ const SimpleVoiceChat = () => {
   const handleSilenceDetected = useCallback(() => {
     console.log('🤫 VAD: 긴 정적 감지 - 자동 녹음 중지');
     if (conversationActiveRef.current && isVADEnabledRef.current) {
-      // VAD가 활성화된 연속 모드에서는 자동으로 다음 음성 대기
       setTimeout(() => {
         setCurrentStatus('listening');
         if (startListeningRef.current) {
@@ -256,7 +480,6 @@ const SimpleVoiceChat = () => {
     }
   }, []);
 
-  // 🔥 PCM 데이터 핸들러
   const handlePCMData = useCallback((arrayBuffer) => {
     if (conversationFlow.isConnected()) {
       conversationFlow.sendVoiceData(arrayBuffer);
@@ -268,10 +491,21 @@ const SimpleVoiceChat = () => {
     try {
       clearError();
       
-      // 오디오 컨텍스트 활성화
+      // 🔥 연결 시작 시 로딩 표시
+      setLoadingState({
+        isVisible: true,
+        progress: 10,
+        status: '서버 연결 중...',
+        title: '연결 시작',
+        modelName: '',
+        isComplete: false,
+        autoHideTimer: null
+      });
+      
       await audioPlayer.resumeContext();
       
-      // WebSocket 연결
+      setLoadingState(prev => ({ ...prev, progress: 30, status: '오디오 시스템 초기화 완료' }));
+      
       await conversationFlow.connectConversation(
         handleSTTResult,
         handleGPTResponse,
@@ -282,7 +516,8 @@ const SimpleVoiceChat = () => {
         handleStateChange
       );
       
-      // 🔥 현재 설정으로 서버 설정
+      setLoadingState(prev => ({ ...prev, progress: 60, status: 'WebSocket 연결 완료' }));
+      
       conversationFlow.updateSettings({
         language: "ko",
         ...currentSettings,
@@ -290,13 +525,18 @@ const SimpleVoiceChat = () => {
         system_prompt: "친근하고 도움이 되는 AI 어시스턴트로서 간단하고 명확하게 대답해주세요. 한두 문장으로 답변해주세요."
       });
       
+      setLoadingState(prev => ({ ...prev, progress: 90, status: '설정 적용 완료' }));
+      
       addSystemMessage('💬 대화 준비 완료! 아래 버튼을 눌러 대화를 시작하세요.');
+      
+      // 백엔드에서 connection_established 메시지가 올 때까지 대기
       
     } catch (error) {
       console.error('❌ 연결 실패:', error);
       setError('연결에 실패했습니다. 다시 시도해주세요.');
+      resetLoadingState();
     }
-  }, [audioPlayer, conversationFlow, handleSTTResult, handleGPTResponse, handleTTSStart, handleTTSAudio, handleTTSComplete, handleError, handleStateChange, clearError, addSystemMessage, currentSettings]);
+  }, [audioPlayer, conversationFlow, handleSTTResult, handleGPTResponse, handleTTSStart, handleTTSAudio, handleTTSComplete, handleError, handleStateChange, clearError, addSystemMessage, currentSettings, resetLoadingState]);
   
   // 🔥 듣기 시작 (VAD 지원) - ref로 저장
   const startListening = useCallback(async () => {
@@ -311,7 +551,6 @@ const SimpleVoiceChat = () => {
       setProcessingStep(isVADEnabledRef.current ? '음성을 기다리고 있습니다... (자동 감지)' : '음성 인식 중...');
       
       if (isVADEnabledRef.current) {
-        // VAD 모드로 녹음 시작 - 현재 설정 사용
         await vadRecorder.startRecording(handlePCMData, {
           onVoiceStart: handleVoiceStart,
           onVoiceEnd: handleVoiceEnd,
@@ -319,7 +558,6 @@ const SimpleVoiceChat = () => {
           vadConfig: currentSettings.vadConfig
         });
       } else {
-        // 일반 모드로 녹음 시작 (기존 방식)
         await vadRecorder.startRecording(handlePCMData);
       }
       
@@ -333,7 +571,6 @@ const SimpleVoiceChat = () => {
     }
   }, [isConnected, vadRecorder, handlePCMData, handleVoiceStart, handleVoiceEnd, handleSilenceDetected, setCurrentTranscript, clearError, setRecording, setError, currentSettings.vadConfig]);
   
-  // startListening을 ref에 저장
   useEffect(() => {
     startListeningRef.current = startListening;
   }, [startListening]);
@@ -355,10 +592,11 @@ const SimpleVoiceChat = () => {
       return;
     }
     
+    setShowAvatar(true);
+    
     setConversationActive(true);
     addSystemMessage(isVADEnabled ? '🤖 VAD 모드로 연속 대화 시작! 자동으로 음성을 감지합니다.' : '💬 연속 대화 모드 시작! AI와 자유롭게 대화하세요.');
     
-    // 즉시 첫 번째 듣기 시작
     await startListening();
   }, [isConnected, startConnection, addSystemMessage, startListening, isVADEnabled]);
   
@@ -366,7 +604,6 @@ const SimpleVoiceChat = () => {
   const stopConversation = useCallback(() => {
     setConversationActive(false);
     
-    // 현재 진행 중인 작업들 모두 중지
     vadRecorder.stopRecording();
     audioPlayer.stop();
     conversationFlow.stopSpeaking();
@@ -376,8 +613,11 @@ const SimpleVoiceChat = () => {
     setCurrentStatus('ready');
     setProcessingStep('');
     
+    // 로딩 프로그래스바도 숨기기
+    resetLoadingState();
+    
     addSystemMessage('🛑 대화가 중지되었습니다.');
-  }, [vadRecorder, audioPlayer, conversationFlow, setRecording, setSpeaking, addSystemMessage]);
+  }, [vadRecorder, audioPlayer, conversationFlow, setRecording, setSpeaking, addSystemMessage, resetLoadingState]);
   
   // 🔥 연결 종료
   const disconnect = useCallback(() => {
@@ -386,61 +626,67 @@ const SimpleVoiceChat = () => {
     
     setConnected(false);
     setCurrentStatus('disconnected');
+    setShowAvatar(false);
+    resetLoadingState();
     addSystemMessage('👋 연결이 종료되었습니다.');
-  }, [stopConversation, conversationFlow, setConnected, addSystemMessage]);
+  }, [stopConversation, conversationFlow, setConnected, addSystemMessage, resetLoadingState]);
   
-  // 🔥 전체 화면 모드 열기
+  // 🔥 전체 화면 모드 열기/닫기
   const openFullScreen = useCallback(async () => {
     setShowFullScreen(true);
   }, []);
 
-  // 🔥 전체 화면 모드 닫기
   const closeFullScreen = useCallback(() => {
     setShowFullScreen(false);
   }, []);
+
+  // 🔥 아바타 상태 계산
+  const getAvatarAnimationClass = () => {
+    if (!isConnected || !showAvatar) return 'ready';
+    if (isRecording) return 'listening';
+    if (isSpeaking) return 'talking';
+    if (currentStatus === 'thinking') return 'thinking';
+    return 'ready';
+  };
 
   // 🔥 상태별 버튼 및 메시지
   const getMainButton = () => {
     if (!isConnected) {
       return (
-        <>
-          <button 
-            className="main-button connect-button"
-            onClick={startConnection}
-            disabled={false}
-          >
-            <span className="button-icon">🔌</span>
-            <span className="button-text">대화 시작</span>
-          </button>
-          
-          <button 
-            className="main-button fullscreen-button"
-            onClick={openFullScreen}
-            disabled={false}
-          >
-            <span className="button-icon">🔌</span>
-            <span className="button-text">대화 시작</span>
-            <span className="button-subtitle">전체 화면 모드로 대화</span>
-          </button>
-        </>
+        <button 
+          className="main-button connect-button"
+          onClick={startConnection}
+          disabled={false}
+        >
+          <span className="button-icon">🔌</span>
+          <span className="button-text">대화 시작</span>
+        </button>
       );
     }
     
     if (!conversationActive) {
       return (
-        <button 
-          className="main-button start-conversation-button"
-          onClick={startConversation}
-          disabled={false}
-        >
-          <span className="button-icon">💬</span>
-          <span className="button-text">{isVADEnabled ? 'VAD 대화하기' : '대화하기'}</span>
-          <span className="button-subtitle">{isVADEnabled ? '자동 음성 감지 모드' : '한 번 클릭으로 연속 대화'}</span>
-        </button>
+        <>
+          <button 
+            className="main-button start-conversation-button"
+            onClick={startConversation}
+            disabled={false}
+          >
+            <span className="button-icon">💬</span>
+            <span className="button-text">{isVADEnabled ? 'VAD 대화하기' : '대화하기'}</span>
+            <span className="button-subtitle">{isVADEnabled ? '자동 음성 감지 모드' : '한 번 클릭으로 연속 대화'}</span>
+          </button>
+          
+          <button 
+            className="manual-button"
+            onClick={startListening}
+          >
+            🎤 한 번만 말하기
+          </button>
+        </>
       );
     }
     
-    // 연속 대화 중일 때는 중지 버튼만 표시
     return (
       <button 
         className="main-button stop-conversation-button"
@@ -458,7 +704,7 @@ const SimpleVoiceChat = () => {
       ready: '🟢 대화 준비 완료',
       listening: isVADEnabled ? '🎤 말씀해 주세요... (자동 감지)' : '🎤 말씀해 주세요...',
       thinking: '🤔 AI가 생각하고 있어요...',
-      talking: '🗣️ AI가 답변하고 있어요...'
+      talking: '🗣️ AI가 답변하고 있어요!'
     };
     
     return messages[currentStatus] || messages.ready;
@@ -478,6 +724,16 @@ const SimpleVoiceChat = () => {
   
   return (
     <>
+      {/* 🔥 백엔드 로딩 프로그래스바 - 개선된 조건 */}
+      <LoadingProgressBar
+        isVisible={loadingState.isVisible}
+        progress={loadingState.progress}
+        status={loadingState.status}
+        title={loadingState.title}
+        modelName={loadingState.modelName}
+        onClose={loadingState.isComplete ? handleCloseProgressBar : null}
+      />
+      
       {/* 전체 화면 아바타 모드 */}
       {showFullScreen && (
         <FullScreenAvatar onClose={closeFullScreen} />
@@ -501,7 +757,6 @@ const SimpleVoiceChat = () => {
             </div>
           )}
           
-          {/* 현재 인식된 음성 표시 */}
           {currentTranscript && (
             <div className="current-transcript">
               <span className="transcript-label">인식된 음성:</span>
@@ -509,7 +764,6 @@ const SimpleVoiceChat = () => {
             </div>
           )}
           
-          {/* VAD 음성 레벨 표시 */}
           {isVADEnabled && vadRecorder.isRecording && (
             <div className="vad-level-display">
               <div className="vad-header">
@@ -527,22 +781,36 @@ const SimpleVoiceChat = () => {
             </div>
           )}
         </div>
+
+        {/* 🔥 아바타 표시 공간 - 대화하기 버튼 클릭 시 react.svg 표시 */}
+        {showAvatar && (
+          <div className="avatar-space">
+            <div className="avatar-placeholder">
+              <img 
+                src={reactSvg} 
+                alt="React Avatar" 
+                className={`avatar-image ${getAvatarAnimationClass()}`}
+              />
+              <p className="avatar-status-text">
+                {getStatusMessage()}
+              </p>
+            </div>
+          </div>
+        )}
         
         {/* 🔥 메인 컨트롤 버튼 */}
         <div className="control-section">
           {getMainButton()}
           
-          {/* 연결된 상태에서만 추가 버튼들 표시 */}
           {isConnected && (
             <>
-              {/* 설정 버튼들 */}
               <div className="settings-buttons">
                 <button 
                   className={`secondary-button tts-settings-button ${showTTSControls ? 'active' : ''}`}
                   onClick={() => setShowTTSControls(!showTTSControls)}
                 >
-                  <span className="button-icon">🎭</span>
-                  <span className="button-text">TTS 설정</span>
+                  <span className="button-icon">🎤</span>
+                  <span className="button-text">음성 설정</span>
                 </button>
                 
                 <button 
@@ -553,7 +821,6 @@ const SimpleVoiceChat = () => {
                   <span className="button-text">VAD 설정</span>
                 </button>
                 
-                {/* VAD 토글 버튼 */}
                 <button 
                   className={`secondary-button vad-toggle-button ${isVADEnabled ? 'active' : ''}`}
                   onClick={() => setIsVADEnabled(!isVADEnabled)}
@@ -574,13 +841,12 @@ const SimpleVoiceChat = () => {
           )}
         </div>
 
-        {/* 🔥 TTS 감정 조절 UI */}
+        {/* 🔥 TTS 및 목소리 설정 UI */}
         {showTTSControls && (
           <div className="settings-panel">
-            <TTSEmotionControl 
+            <VoiceTTSControl 
               onSettingsChange={handleTTSSettingsChange}
-              currentSettings={currentSettings}
-              isVisible={showTTSControls}
+              className="voice-tts-panel"
             />
           </div>
         )}
@@ -599,7 +865,6 @@ const SimpleVoiceChat = () => {
           </div>
         )}
         
-        {/* 🔥 대화 모드에 따른 안내 메시지 */}
         {conversationActive && (
           <div className="conversation-mode-status">
             <div className="mode-indicator">
@@ -614,20 +879,8 @@ const SimpleVoiceChat = () => {
             </div>
           </div>
         )}
+
         
-        {/* 🔥 수동 컨트롤 (연속 모드가 아닐 때만) */}
-        {isConnected && !conversationActive && currentStatus === 'ready' && (
-          <div className="manual-controls">
-            <button 
-              className="manual-button"
-              onClick={startListening}
-            >
-              🎤 한 번만 말하기
-            </button>
-          </div>
-        )}
-        
-        {/* 🔥 듣기 중일 때 중지 버튼 (VAD 비활성 시만) */}
         {isRecording && !isVADEnabled && (
           <div className="listening-controls">
             <button 
@@ -639,7 +892,6 @@ const SimpleVoiceChat = () => {
           </div>
         )}
         
-        {/* 🔥 에러 표시 */}
         {error && (
           <div className="error-section">
             <div className="error-message">

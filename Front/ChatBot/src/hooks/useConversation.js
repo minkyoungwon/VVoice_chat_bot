@@ -165,6 +165,29 @@ export const useConversationFlow = () => {
     onStateChange
   ) => {
     const handleMessage = (data) => {
+      // 🔥 백엔드 로딩 및 진행률 메시지들 처리
+      if (data.type) {
+        switch (data.type) {
+          case 'model_loading_progress':
+          case 'model_loading_complete':
+          case 'model_loading_error':
+          case 'model_warmup_start':
+          case 'model_warmup_complete':
+          case 'cache_hit':
+          case 'generation_started':
+          case 'generation_metadata':
+          case 'generation_complete':
+          case 'connection_established':
+          case 'parallel_processing':
+          case 'generation_error':
+            // 🔥 백엔드 로딩 관련 메시지들을 onStateChange로 전달
+            console.log('🔄 백엔드 로딩 메시지:', data.type, data);
+            onStateChange?.(data.type, data);
+            return; // 여기서 리턴해서 아래 switch문으로 가지 않음
+        }
+      }
+      
+      // 🔥 기존 대화 관련 이벤트 처리
       switch (data.event) {
         case 'stt_completed':
           onSTTResult?.(data.transcript);
@@ -341,8 +364,13 @@ export const useConversationFlow = () => {
           break;
           
         default:
+          // 🔥 알 수 없는 메시지 타입 처리 개선
           if (data.error) {
             onError?.(data.error);
+          } else {
+            console.log('🔍 처리되지 않은 메시지:', data);
+            // 알 수 없는 메시지도 onStateChange로 전달하여 상위에서 처리할 수 있도록 함
+            onStateChange?.('unknown_message', data);
           }
           break;
       }
