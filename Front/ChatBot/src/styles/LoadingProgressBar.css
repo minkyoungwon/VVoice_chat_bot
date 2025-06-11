@@ -26,8 +26,8 @@
   padding: 30px;
   max-width: 500px;
   width: 90%;
-  box-shadow: 0 20px 60px rgba(156, 39, 176, 0.3);
-  border: 2px solid rgba(156, 39, 176, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 2px solid #e5e7eb;
   animation: modalSlideIn 0.4s ease;
   position: relative;
 }
@@ -59,7 +59,7 @@
 
 .progress-title h3 {
   margin: 0;
-  color: #9c27b0;
+  color: #1a202c;
   font-size: 1.4rem;
   font-weight: 600;
 }
@@ -86,31 +86,32 @@
 }
 
 .progress-close-btn:hover {
-  background: rgba(156, 39, 176, 0.1);
-  color: #9c27b0;
+  background: #f3f4f6;
+  color: #374151;
 }
 
 /* 모델 정보 */
 .progress-model-info {
-  background: rgba(156, 39, 176, 0.05);
+  background: #f9fafb;
   padding: 12px 16px;
   border-radius: 10px;
   margin-bottom: 20px;
-  border: 1px solid rgba(156, 39, 176, 0.2);
+  border: 1px solid #e5e7eb;
 }
 
 .model-label {
-  color: #9c27b0;
+  color: #374151;
   font-weight: 600;
   font-size: 0.9rem;
   margin-right: 8px;
 }
 
 .model-name {
-  color: #333;
+  color: #1a202c;
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
-  background: rgba(156, 39, 176, 0.1);
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -123,7 +124,8 @@
 .progress-track {
   width: 100%;
   height: 12px;
-  background: rgba(156, 39, 176, 0.1);
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -206,8 +208,8 @@
 .progress-percentage {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #9c27b0;
-  text-shadow: 0 1px 2px rgba(156, 39, 176, 0.2);
+  color: #374151;
+  text-shadow: 0 1px 2px rgba(55, 65, 81, 0.2);
 }
 
 /* 상태 메시지 영역 */
@@ -239,8 +241,8 @@
 .spinner-ring {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(156, 39, 176, 0.2);
-  border-top: 3px solid #9c27b0;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #374151;
   border-radius: 50%;
   animation: spinnerRotate 1s linear infinite;
 }
@@ -260,15 +262,17 @@
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  background: rgba(156, 39, 176, 0.05);
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  border-left: 4px solid #9c27b0;
+  border-left: 4px solid #374151;
   transition: all 0.3s ease;
 }
 
 .info-stage.complete {
-  background: rgba(76, 175, 80, 0.1);
-  border-left-color: #4caf50;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left-color: #16a34a;
   animation: stageComplete 0.5s ease;
 }
 
@@ -296,7 +300,7 @@
 
 /* 하단 도움말 */
 .progress-footer {
-  border-top: 1px solid rgba(156, 39, 176, 0.1);
+  border-top: 1px solid #e5e7eb;
   padding-top: 15px;
   margin-top: 15px;
 }
@@ -309,7 +313,7 @@
 }
 
 .footer-tip strong {
-  color: #9c27b0;
+  color: #374151;
 }
 
 /* 반응형 디자인 */
@@ -368,7 +372,8 @@
   
   .progress-model-info,
   .info-stage {
-    background: rgba(156, 39, 176, 0.15);
+    background: #f3f4f6;
+    border-color: #d1d5db;
   }
   
   .progress-close-btn:hover {

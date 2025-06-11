@@ -80,7 +80,7 @@ const EnhancedSidebar = ({
           <div className="header-content">
             <h2 className="sidebar-title">
               <span className="title-icon">🤖</span>
-              <span className="title-text">AI 어시스턴트</span>
+              <span className="title-text">Voice - Thief - AI</span>
             </h2>
             <button 
               className="sidebar-close-btn"
@@ -221,8 +221,8 @@ const EnhancedSidebar = ({
         <div className="sidebar-footer">
           <div className="footer-content">
             <div className="version-info">
-              <span className="app-name">Zonos AI</span>
-              <span className="version">v2.0</span>
+              <span className="app-name">제작자</span>
+              <span className="version">v민경원</span>
             </div>
             <div className="status-indicator">
               <div className={`connection-dot ${avatarState !== 'idle' ? 'active' : 'inactive'}`}></div>

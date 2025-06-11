@@ -5,6 +5,7 @@ import ChatHistory from './components/ChatHistory';
 import useChatStore from './store/chatStore';
 import './App.css';
 
+
 function App() {
   const { isConnected, isRecording, isSpeaking, error, messages } = useChatStore();
   const [sidebarOpen, setSidebarOpen] = useState(false); // 기본적으로 사이드바 숨김
@@ -48,10 +49,10 @@ function App() {
   const getCurrentMessage = () => {
     const state = getAvatarState();
     const messageMap = {
-      idle: isConnected ? '😊 안녕하세요! 대화해요!' : '😴 연결을 기다리고 있어요',
-      listening: '🎤 잘 듣고 있어요!',
-      thinking: '🤔 답변을 생각하고 있어요...',
-      speaking: '🗣️ 답변을 말씀드리고 있어요!'
+      idle: isConnected ? '대화 모드' : '연결 대기 중',
+      listening: '음성 인식 중',
+      thinking: 'AI 처리 중',
+      speaking: '응답 중'
     };
     return messageMap[state] || messageMap.idle;
   };
@@ -132,7 +133,7 @@ function App() {
         {/* 🔥 간단한 헤더 */}
         <header className="app-header">
           <div className="header-left">
-            <h1>💬 Zonos AI 대화</h1>
+            <h1 color='black'>💬 VoiceThief AI 대화</h1>
             <div className="connection-status">
               <span className={`status-dot ${isConnected ? 'connected' : 'disconnected'}`}></span>
               <span className="status-text">
