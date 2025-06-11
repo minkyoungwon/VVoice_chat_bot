@@ -140,8 +140,17 @@ const ChatHistory = ({ messages = [] }) => {
                 <span className="title-icon">💬</span>
                 대화 기록
               </h3>
-              <div className="message-count">
-                {messages.length > 0 ? `${messages.length}개 메시지` : '아직 메시지가 없어요'}
+              <div className="header-actions">
+                <div className="message-count">
+                  {messages.length > 0 ? `${messages.length}개 메시지` : '아직 메시지가 없어요'}
+                </div>
+                <button 
+                  className="close-chat-button"
+                  onClick={() => setIsExpanded(false)}
+                  title="대화기록 닫기"
+                >
+                  ✕
+                </button>
               </div>
             </div>
 

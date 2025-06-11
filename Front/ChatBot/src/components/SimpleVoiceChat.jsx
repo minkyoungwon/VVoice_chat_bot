@@ -677,11 +677,13 @@ const SimpleVoiceChat = () => {
             <span className="button-subtitle">{isVADEnabled ? '자동 음성 감지 모드' : '한 번 클릭으로 연속 대화'}</span>
           </button>
           
+          {/* 한 번만 말하기 / 말하기 완료 토글 버튼 */}
           <button 
-            className="manual-button"
-            onClick={startListening}
+            className={`manual-button ${isRecording ? 'recording' : ''}`}
+            onClick={isRecording ? stopListening : startListening}
+            disabled={false}
           >
-            🎤 한 번만 말하기
+            {isRecording ? '⏹️ 말하기 완료' : '🎤 한 번만 말하기'}
           </button>
         </>
       );
@@ -880,17 +882,7 @@ const SimpleVoiceChat = () => {
           </div>
         )}
 
-        
-        {isRecording && !isVADEnabled && (
-          <div className="listening-controls">
-            <button 
-              className="stop-listening-button"
-              onClick={stopListening}
-            >
-              ⏹️ 말하기 완료
-            </button>
-          </div>
-        )}
+
         
         {error && (
           <div className="error-section">
