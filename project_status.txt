@@ -91,3 +91,6 @@
 EnhancedAnimatedAvatar.jsx
 AnimatedAvatar.jsx
 VoiceChat.jsx
+
+scripts 파일도 지워야하고 
+꾸미는것은 안꾸며도 될듯
