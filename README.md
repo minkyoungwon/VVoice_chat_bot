@@ -48,33 +48,8 @@
 
 ## 🏗️ 시스템 아키텍처
 
-```mermaid
-graph TB
-    subgraph "Frontend (React + Vite)"
-        A[🎤 음성 입력] --> B[WebSocket STT]
-        B --> C[💬 텍스트 처리]
-        C --> D[HTTP GPT API]
-        D --> E[WebSocket TTS]
-        E --> F[🔊 음성 출력]
-    end
-    
-    subgraph "Backend (FastAPI)"
-        G[/ws/stt] --> H[Whisper STT]
-        I[/api/gpt] --> J[DeepSeek GPT]
-        K[/ws/tts] --> L[Zonos TTS]
-    end
-    
-    subgraph "Storage"
-        M[(Firebase Firestore)]
-        N[📁 Voice Assets]
-    end
-    
-    B -.-> G
-    D -.-> I
-    E -.-> K
-    C --> M
-    L --> N
-```
+
+
 
 ## 📦 설치 및 실행
 
@@ -85,12 +60,12 @@ graph TB
 - **Git LFS** (모델 파일용)
 
 ### 1️⃣ 저장소 클론
-```bash
+bash
 git clone https://github.com/yourusername/VVoice_chat_bot.git
-```
+
 
 ### 2️⃣ 백엔드 설정
-```bash
+bash
 cd Zonos
 
 # 가상환경 생성 및 활성화
@@ -112,10 +87,10 @@ cp .env.example .env
 
 # 서버 실행
 python main.py
-```
+
 
 ### 3️⃣ 프론트엔드 설정
-```bash
+
 cd Front/ChatBot
 
 # 의존성 설치
@@ -126,7 +101,7 @@ cp .env.example .env
 
 # 개발 서버 실행
 npm run dev
-```
+
 
 ### 4️⃣ 접속
 - **프론트엔드**: http://localhost:5173
