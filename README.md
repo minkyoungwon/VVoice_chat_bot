@@ -1,4 +1,4 @@
-# 🎙️ Zonos Voice Chat System
+# 🎙️ Voice Chat System
 
 <div align="center">
 
