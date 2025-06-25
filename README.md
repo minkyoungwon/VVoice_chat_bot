@@ -10,7 +10,7 @@
 
 **실시간 음성 대화가 가능한 AI 챗봇 시스템**
 
-[데모 보기](#demo) • [설치 가이드](#installation) • [API 문서](#api) • [기여하기](#contributing)
+[데모 보기](#https://youtu.be/ANT1E5_s2Hk)
 
 </div>
 
