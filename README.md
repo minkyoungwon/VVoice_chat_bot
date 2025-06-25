@@ -10,7 +10,7 @@
 
 **실시간 음성 대화가 가능한 AI 챗봇 시스템**
 
-[데모 보기](https://youtu.be/ANT1E5_s2Hk) ⊙ [노션페이지]([https://youtu.be/ANT1E5_s2Hk](https://determined-primula-ac4.notion.site/AI-WEB-25-05-26-06-16-209eae425a69802a9e91d0f0cffe6eb6?source=copy_link)))
+[데모 보기](https://youtu.be/ANT1E5_s2Hk) ⊙ [노션페이지]([https://youtu.be/ANT1E5_s2Hk](https://determined-primula-ac4.notion.site/AI-WEB-25-05-26-06-16-209eae425a69802a9e91d0f0cffe6eb6?source=copy_link))
 
 </div>
 
